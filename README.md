@@ -14,6 +14,7 @@ Mock data examples are available under [examples](./examples/).
 ## Testing event feature (O&M TruthObservation)
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
+geometry                            | The point location of the place of residence of the tested subject | |
 featureType                         | O&M Observation type, always ```TruthObservation``` | "TruthObservation" |
 phenomenonTime                      | Time when observed phenomenon was happening, here the time when the sample was taken | "2020-03-18T12:05:00Z" |
 resultTime                          | Time of the creating the Observation, here the time when the infection result (true/false) was available/recorded | "2020-03-19T13:01:25Z" |
@@ -32,6 +33,7 @@ result                             | The result of the test, here ```true``` if 
 ## MedicalFacility feature
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
+geometry                            | The point location of the facility  | |
 featureType                         | Feature type, always ```MedicalFacility```   | "MedicalFacility" |
 name                                | Name of the facility                         | "HUSLAB - Laboratory of virology and immunology" |
 city                                | Name if the city where the facility is located in | "Helsinki" |
@@ -42,6 +44,7 @@ locationReference                   | Reference to location of the facility | "h
 ## Sampling feature
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
+geometry                            | The point location of the place where the sampling was done | |
 featureType                         | Feature type, always ```Sampling```   | "Sampling" |
 samplingFacilityName                | Name of the facility where the sample was taken | "HUSLAB - Kamppi" |
 samplingFacilityReference           | Reference to the description of the facility where the sample was taken (points to MedicalFacility) | "https://korona.thl.fi/tests/api/collections/facilities/items/d9a1ba35-c8af-4d0d-94b7-1e314f27d7aa" |
@@ -52,6 +55,7 @@ samplingTime                        | Time when the sample was taken | "2020-03-
 ## TestSubject feature
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
+geometry                            | The point location of the place of residence of the tested subject | |
 featureType                         | Feature type, always ```TestSubject```   | "TestSubject" |
 species                             | Name of the species tested | "human" |
 ageYears                            | Age of the test subject in years | 65 |
@@ -63,10 +67,13 @@ placeOfResidenceReference           | Reference to the description of the place 
 ## ResidentialArea feature
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
+geometry                            | The geometry of the residential area (typically a polygon) | |
 featureType                         | Feature type, always ```ResidentialArea```   | "ResidentialArea" |
 name                                | Name of the area                         | "Pasila" |
 city                                | Name if the city where the area is located in | "Helsinki" |
 region                              | Name if the region within the country where the area is located in | "Uusimaa" |  
 country                             | Name if the country where the area is located in | "Finland" |
 locationReference                   | Reference to location of the area | "https://www.geonames.org/642554/pasila.html" |
+area_m2                             | Area of the residential area in square meters | 4394410.998 |
+population                          | Population of the residential area (if available) | 15000 |
 
