@@ -33,7 +33,7 @@ result                             | The result of the test, here ```true``` if 
 ## New infection count analysis feature (O&M MeasureObservation)
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
-geometry                            | The representative point location of a residential area | |
+geometry                            | The representative point location or polygon geometry of the residential area | |
 featureType                         | O&M Observation type, always ```MeasureObservation``` | "MeasureObservation" |
 phenomenonTimeStart                 | Beginning of the sample collection time period over which the statistics is calculated | "2020-03-18T00:00:00+02:00" |
 phenomenonTimeEnd                   | End of the sample collection time period over which the statistics is calculated | "2020-03-18T23:23:59+02:00" |
