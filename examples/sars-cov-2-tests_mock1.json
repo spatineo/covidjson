@@ -101,7 +101,7 @@
         "featureType": "ResidentalArea",
         "name": "Pasila",
         "city": "Helsinki",
-        "region": "Uusimaa",
+        "level1AdministrativeUnit": "Uusimaa",
         "country": "Finland",
         "locationReference": "https://www.geonames.org/642554/pasila.html",
         "area_m2": 4394410.998,

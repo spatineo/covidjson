@@ -71,9 +71,8 @@ geometry                            | The geometry of the residential area (typi
 featureType                         | Feature type, always ```ResidentialArea```   | "ResidentialArea" |
 name                                | Name of the area                         | "Pasila" |
 city                                | Name if the city where the area is located in | "Helsinki" |
-region                              | Name if the region within the country where the area is located in | "Uusimaa" |  
+level1AdministrativeUnit            | Name if the administrative unit within the country where the area is located in | "Uusimaa" |
 country                             | Name if the country where the area is located in | "Finland" |
 locationReference                   | Reference to location of the area | "https://www.geonames.org/642554/pasila.html" |
 area_m2                             | Area of the residential area in square meters | 4394410.998 |
 population                          | Population of the residential area (if available) | 15000 |
-
