@@ -1,4 +1,72 @@
-# sars-cov-2-tests
-Drafting of a data model and API for SARS-CoV-2 infection testing data based on O&amp;M concepts
+# Infection testing JSON
+**NOTE: this is a draft version**
 
-**Important**: all data contained in the repository is fictious. For up-to-date information on the COVID-19 situation in Finland, see https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates
+A GeoJSON data model for viral infection testing data based on Observations & measurements standard ([O&M, ISO 19156](https://www.iso.org/standard/32574.html)) concepts. Created specifically for recording and exchanging data on SARS-CoV-2 infection tests, but likely applicable also to describing test data for detecting other infectious diseases too.
+
+The data model is based on concepts of the international standard "Observations and measurements" (ISO 19156) that defines a conceptual model for describing observation events and their results as geospatial features. This specification uses an early draft proposal version of the ISO 19156 Edition 2 data model currently under preparation in the [OGC O&M Standards Working Group](https://github.com/opengeospatial/om-swg).
+
+Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [CoronaGISFinland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
+
+Mock data examples are available under [examples](./examples/).
+
+**Important**: all data contained in this repository is fictious. For up-to-date official information on the COVID-19 situation in Finland, see https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates
+
+## Testing event feature (O&M TruthObservation)
+GeoJSON property                    | Description                                  | Example value
+------------------------------------|----------------------------------------------|--------------
+featureType                         | O&M Observation type, always ```TruthObservation``` | "TruthObservation" |
+phenomenonTime                      | Time when observed phenomenon was happening, here the time when the sample was taken | "2020-03-18T12:05:00Z" |
+resultTime                          | Time of the creating the Observation, here the time when the infection result (true/false) was available/recorded | "2020-03-19T13:01:25Z" |
+procedureName                       | Name of the method used for creating the Observation | "Reverse transcription polymerase chain reaction (rRT-PCR)" or "Medical diagnosis" |
+procedureReference                  | Reference to the description of the method. Primary importance as an identifier of the various test methods | "https://korona.thl.fi/tests/procedure/rRT-PCR" |
+observedPropertyTitle               | Title of the observed property, here the infection kind | "SARS-CoV-2 infection"
+observedProperty                    | Reference to the description of the observed property | "https://ictvonline.org/taxonomy/SARS-CoV-2"
+observerName                        | Kind of the sensor / analysis instrument / person acting creating the result from the sample | "Acme PCR Analyzer 2000" or "medical doctor" |
+platformName                        | Name of the entity hosting the Observer | "HUSLAB - Laboratory of virology and immunology"
+platformReference                   | Reference to the description of the entity hosting the Observer  (points to MedicalFacility) | "https://korona.thl.fi/tests/api/collections/facilities/items/0f4d84ec-dabf-44c8-b133-973d80cbbed2" |
+proximateFeatureOfInterestName      | Name of the sampling used | "Nasopharyngeal swab sample"
+proximateFeatureOfInterestReference | Reference to the description of the sampling used (points to Sampling) | "https://korona.thl.fi/tests/api/collections/samplings/items/bfed92c2-dca6-4ac0-9b4e-9ceb4ff90f42" |
+ultimateFeatureOfInterestReference | Reference to the description of the ultimate target of the Observation, here the person / animal tested for (points to the TestSubject) | "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5" |
+result                             | The result of the test, here ```true``` if infection was detected and ```false``` if it was not | true
+
+## MedicalFacility feature
+GeoJSON property                    | Description                                  | Example value
+------------------------------------|----------------------------------------------|--------------
+featureType                         | Feature type, always ```MedicalFacility```   | "MedicalFacility" |
+name                                | Name of the facility                         | "HUSLAB - Laboratory of virology and immunology" |
+city                                | Name if the city where the facility is located in | "Helsinki" |
+region                              | Name if the region within the country where the facility is located in | "Uusimaa" |  
+country                             | Name if the country where the facility is located in | "Finland" |
+locationReference                   | Reference to location of the facility | "https://www.geonames.org/646253/meilahti.html" |
+
+## Sampling feature
+GeoJSON property                    | Description                                  | Example value
+------------------------------------|----------------------------------------------|--------------
+featureType                         | Feature type, always ```Sampling```   | "Sampling" |
+samplingFacilityName                | Name of the facility where the sample was taken | "HUSLAB - Kamppi" |
+samplingFacilityReference           | Reference to the description of the facility where the sample was taken (points to MedicalFacility) | "https://korona.thl.fi/tests/api/collections/facilities/items/d9a1ba35-c8af-4d0d-94b7-1e314f27d7aa" |
+sampleType                          | Kind of the sample captured during sampling | "Nasopharyngeal swab" |
+sampledFeatureReference             | Reference to the description of the subject of the sampling, here the person / animal tested for (points to the TestSubject) | "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5" |
+samplingTime                        | Time when the sample was taken | "2020-03-18T12:05:00Z"
+
+## TestSubject feature
+GeoJSON property                    | Description                                  | Example value
+------------------------------------|----------------------------------------------|--------------
+featureType                         | Feature type, always ```TestSubject```   | "TestSubject" |
+species                             | Name of the species tested | "human" |
+ageYears                            | Age of the test subject in years | 65 |
+gender                              | Gender of the test subject | "male" |
+placeOfResidenceName                | Name of the place of residence of the test subject | "Pasila, Helsinki, Finland" |
+placeOfResidenceReference           | Reference to the description of the place of residence of the test subject (points to ResidentialArea) | "https://korona.thl.fi/tests/api/collections/residentalAreas/items/c38df204-8356-43d0-bbb6-c2f09b4a5473" |
+
+
+## ResidentialArea feature
+GeoJSON property                    | Description                                  | Example value
+------------------------------------|----------------------------------------------|--------------
+featureType                         | Feature type, always ```ResidentialArea```   | "ResidentialArea" |
+name                                | Name of the area                         | "Pasila" |
+city                                | Name if the city where the area is located in | "Helsinki" |
+region                              | Name if the region within the country where the area is located in | "Uusimaa" |  
+country                             | Name if the country where the area is located in | "Finland" |
+locationReference                   | Reference to location of the area | "https://www.geonames.org/642554/pasila.html" |
+
