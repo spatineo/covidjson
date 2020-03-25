@@ -11,17 +11,17 @@ Mock data examples are available under [examples](./examples/).
 
 **Important**: all data contained in this repository is fictious. For up-to-date official information on the COVID-19 situation in Finland, see https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates
 
-## Testing event feature (O&M TruthObservation)
+## Individual testing event feature (O&M TruthObservation)
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
-geometry                            | The point location of the place of residence of the tested subject | |
+geometry                            | The representative point location of the place of residence of the tested subject | |
 featureType                         | O&M Observation type, always ```TruthObservation``` | "TruthObservation" |
 phenomenonTime                      | Time when observed phenomenon was happening, here the time when the sample was taken | "2020-03-18T12:05:00Z" |
-resultTime                          | Time of the creating the Observation, here the time when the infection result (true/false) was available/recorded | "2020-03-19T13:01:25Z" |
+resultTime                          | Time of the recording or making the Observation result available, here the time when the infection result (true/false) was available/recorded | "2020-03-19T13:01:25Z" |
 procedureName                       | Name of the method used for creating the Observation | "Reverse transcription polymerase chain reaction (rRT-PCR)" or "Medical diagnosis" |
 procedureReference                  | Reference to the description of the method. Primary importance as an identifier of the various test methods | "https://korona.thl.fi/tests/procedure/rRT-PCR" |
 observedPropertyTitle               | Title of the observed property, here the infection kind | "SARS-CoV-2 infection"
-observedProperty                    | Reference to the description of the observed property | "https://ictvonline.org/taxonomy/SARS-CoV-2"
+observedProperty                    | Reference to the description of the observed property | "https://korona.thl.fi/tests/quantity/SARS-CoV-2-infection"
 observerName                        | Kind of the sensor / analysis instrument / person acting creating the result from the sample | "Acme PCR Analyzer 2000" or "medical doctor" |
 platformName                        | Name of the entity hosting the Observer | "HUSLAB - Laboratory of virology and immunology"
 platformReference                   | Reference to the description of the entity hosting the Observer  (points to MedicalFacility) | "https://korona.thl.fi/tests/api/collections/facilities/items/0f4d84ec-dabf-44c8-b133-973d80cbbed2" |
@@ -30,6 +30,24 @@ proximateFeatureOfInterestReference | Reference to the description of the sampli
 ultimateFeatureOfInterestReference | Reference to the description of the ultimate target of the Observation, here the person / animal tested for (points to the TestSubject) | "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5" |
 result                             | The result of the test, here ```true``` if infection was detected and ```false``` if it was not | true
 
+## New infection count analysis feature (O&M MeasureObservation)
+GeoJSON property                    | Description                                  | Example value
+------------------------------------|----------------------------------------------|--------------
+geometry                            | The representative point location of a residential area | |
+featureType                         | O&M Observation type, always ```MeasureObservation``` | "MeasureObservation" |
+phenomenonTimeStart                 | Beginning of the sample collection time period over which the statistics is calculated | "2020-03-18T00:00:00+02:00" |
+phenomenonTimeEnd                   | End of the sample collection time period over which the statistics is calculated | "2020-03-18T23:23:59+02:00" |
+stimulusTime                        | Time of the triggering the Observation creation, here when the analysis started | "2020-03-20T00:00:00+02:00" |
+resultTime                          | Time of the recording or making the Observation result available, here the time when the static spatial analysis result was recorded | "2020-03-20T00:00:32+02:00" |
+procedureName                       | Name of the method used for creating the Observation | "Spatial analysis of new lab verified infections by residential area of the tested subjects" |
+procedureReference                  | Reference to the description of the method. Primary importance as an identifier of the various test methods | "https://korona.thl.fi/tests/procedure/new-verified-infections-in-residential-area" |
+observedPropertyTitle               | Title of the observed property, here the infection kind | "Number of new SARS-CoV-2 infections"
+observedProperty                    | Reference to the description of the observed property | "https://korona.thl.fi/tests/quantity/SARS-CoV-2-new-infections"
+observerName                        | Organization responsible for the analysis | "https://thl.fi/" |
+ultimateFeatureOfInterestName       | Name of the ultimate target of the Observation, here the area of residence of a subset of tested subjects | "Pasila, Helsinki, Finland",
+ultimateFeatureOfInterestReference | Reference to the description of the ultimate target of the Observation, here the area of residence of a subset of tested subjects (points to the GeoNames RDF resource) | "https://sws.geonames.org/642554/about.rdf" |
+result                             | The result of the test, here the number of new infections in the population living within the residential area during the specified sample collection time period | 56
+
 ## MedicalFacility feature
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
@@ -37,9 +55,9 @@ geometry                            | The point location of the facility  | |
 featureType                         | Feature type, always ```MedicalFacility```   | "MedicalFacility" |
 name                                | Name of the facility                         | "HUSLAB - Laboratory of virology and immunology" |
 city                                | Name if the city where the facility is located in | "Helsinki" |
-region                              | Name if the region within the country where the facility is located in | "Uusimaa" |  
+level1AdministrativeUnit            | Name if the region within the country where the facility is located in | "Uusimaa" | 
 country                             | Name if the country where the facility is located in | "Finland" |
-locationReference                   | Reference to location of the facility | "https://www.geonames.org/646253/meilahti.html" |
+locationReference                   | Reference to location of the facility | "https://www.geonames.org/646253/about.rdf" |
 
 ## Sampling feature
 GeoJSON property                    | Description                                  | Example value
@@ -61,18 +79,4 @@ species                             | Name of the species tested | "human" |
 ageYears                            | Age of the test subject in years | 65 |
 gender                              | Gender of the test subject | "male" |
 placeOfResidenceName                | Name of the place of residence of the test subject | "Pasila, Helsinki, Finland" |
-placeOfResidenceReference           | Reference to the description of the place of residence of the test subject (points to ResidentialArea) | "https://korona.thl.fi/tests/api/collections/residentalAreas/items/c38df204-8356-43d0-bbb6-c2f09b4a5473" |
-
-
-## ResidentialArea feature
-GeoJSON property                    | Description                                  | Example value
-------------------------------------|----------------------------------------------|--------------
-geometry                            | The geometry of the residential area (typically a polygon) | |
-featureType                         | Feature type, always ```ResidentialArea```   | "ResidentialArea" |
-name                                | Name of the area                         | "Pasila" |
-city                                | Name if the city where the area is located in | "Helsinki" |
-level1AdministrativeUnit            | Name if the administrative unit within the country where the area is located in | "Uusimaa" |
-country                             | Name if the country where the area is located in | "Finland" |
-locationReference                   | Reference to location of the area | "https://www.geonames.org/642554/pasila.html" |
-area_m2                             | Area of the residential area in square meters | 4394410.998 |
-population                          | Population of the residential area (if available) | 15000 |
+placeOfResidenceReference           | Reference to the description of the place of residence of the test subject (points to GeoNames RDF resource) | "https://sws.geonames.org/642554/about.rdf" |
