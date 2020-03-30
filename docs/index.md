@@ -8,7 +8,7 @@ The data model is based on concepts of the international standard "Observations 
 
 Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [CoronaGISFinland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
 
-Mock data examples are available under [examples](https://github.com/ilkkarinne/infection-testing-json/examples/).
+Mock data examples are available under [examples](https://github.com/ilkkarinne/covidjson/tree/master/examples).
 
 **Important**: all data contained in this repository is fictious. For up-to-date official information on the COVID-19 situation in Finland, see https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates
 
@@ -57,6 +57,7 @@ result                             | The result of the observation, here array n
 ## Individual infection test/diagnosis data
 
 ### Single testing event feature (O&M TruthObservation)
+
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
 geometry                            | The representative point location of the place of residence of the tested subject | |
@@ -76,6 +77,7 @@ ultimateFeatureOfInterestReference | Reference to the description of the ultimat
 result                             | The result of the test, here ```true``` if infection was detected and ```false``` if it was not | true
 
 ### MedicalFacility feature
+
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
 geometry                            | The point location of the facility  | |
@@ -87,6 +89,7 @@ country                             | Name if the country where the facility is 
 locationReference                   | Reference to location of the facility | "https://www.geonames.org/646253/about.rdf" |
 
 ### Sampling feature
+
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
 geometry                            | The point location of the place where the sampling was done | |
@@ -98,6 +101,7 @@ sampledFeatureReference             | Reference to the description of the subjec
 samplingTime                        | Time when the sample was taken | "2020-03-18T12:05:00Z"
 
 ### TestSubject feature
+
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
 geometry                            | The point location of the place of residence of the tested subject | |
