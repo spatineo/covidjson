@@ -33,7 +33,7 @@ Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [
     }
 ```
 The above feature rendered on a map:
-<script src="https://embed.github.com/view/geojson/ilkkarinne/covidjson/examples/sars-cov-2_case-statistics_neighbourhood.json"></script>
+<script src="https://raw.githubusercontent.com/ilkkarinne/covidjson/master/examples/sars-cov-2_case-statistics_neighbourhood.json"></script>
 
 Mock data examples are available under [examples](https://github.com/ilkkarinne/covidjson/tree/master/examples).
 
