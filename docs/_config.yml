@@ -1,2 +1,5 @@
 theme: jekyll-theme-slate
 title: CovidJSON
+google_analytics: UA-21595267-12
+plugins:
+  - jekyll-sitemap
