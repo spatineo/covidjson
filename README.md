@@ -14,6 +14,7 @@ Mock data examples are available under [examples](./examples/).
 ## Infection statistics (positive tests) per residental area
 
 ### New daily infections per region feature (O&M MeasureObservation)
+
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
 geometry                            | The representative point location or polygon geometry of the residential area | |
@@ -32,23 +33,25 @@ ultimateFeatureOfInterestReference | Reference to the description of the ultimat
 result                             | The result of the observation, here the number of new infections in the population living within the residential area during the specified sample collection time period | 56
 
 ### Daily infection timeseries feature (O&M MeasureTimeseriesObservation)
+The change in the number of positive tests over time can also be of daily test results can also be included as the results of area specific observations. This is handy when results are visualized on a timeline or chart. The array valued ```timeStep``` and ```result``` properties do require a bit more fom the interpreting code that the simple values. 
+
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
 geometry                            | The representative point location or polygon geometry of the residential area | |
 featureType                         | O&M Observation type, always ```MeasureTimeseriesObservation``` | "MeasureTimeseriesObservation" |
-phenomenonTimeStart                 | Beginning of the sample collection time period over which the statistics is calculated | "2020-03-18T00:00:00+02:00" |
-phenomenonTimeEnd                   | End of the sample collection time period over which the statistics is calculated | "2020-03-18T23:23:59+02:00" |
+phenomenonTimeStart                 | Beginning of the sample collection time period over which the daily statistics is calculated | "2020-02-24T00:00:00+02:00" |
+phenomenonTimeEnd                   | End of the sample collection time period over which the daily statistics is calculated | "2020-03-01T23:23:59+02:00" |
 stimulusTime                        | Time of the triggering the Observation creation, here when the analysis started | "2020-03-20T00:00:00+02:00" |
 resultTime                          | Time of the recording or making the Observation result available, here the time when the static spatial analysis result was recorded | "2020-03-20T00:00:32+02:00" |
-procedureName                       | Name of the method used for creating the Observation | "Spatial analysis of new lab verified infections by residential area of the tested subjects" |
-procedureReference                  | Reference to the description of the method. Primary importance as an identifier of the various test methods | "https://korona.thl.fi/tests/procedure/new-verified-infections-in-residential-area" |
+procedureName                       | Name of the method used for creating the Observation | "Spatial analysis of new lab verified infections by residential area of the tested subjects. Results aggregated by day of taking the sample" |
+procedureReference                  | Reference to the description of the method. Primary importance as an identifier of the various test methods | "https://korona.thl.fi/tests/procedure/new-verified-infections-in-residential-area-daily" |
 observedPropertyTitle               | Title of the observed property, here the infection kind | "Number of new SARS-CoV-2 infections"
 observedProperty                    | Reference to the description of the observed property | "https://korona.thl.fi/tests/quantity/SARS-CoV-2-new-infections"
 observerName                        | Organization responsible for the analysis | "https://thl.fi/" |
 ultimateFeatureOfInterestName       | Name of the ultimate target of the Observation, here the area of residence of a subset of tested subjects | "Helsinki and Uusimaa Hospital District, Finland",
 ultimateFeatureOfInterestReference | Reference to the description of the ultimate target of the Observation, here the area of residence of a subset of tested subjects |  |
-timeStep                           | Array of date and time entries for the points in the time series | [ "2020-02-24T23:59:59Z", "2020-02-25T23:59:59Z" ]  |
-result                             | The result of the observation, here array number of new infections for each point in time included in the series | [ 0, 3 ]
+timeStep                           | Array of date and time entries for the points in the time series | [ "2020-02-24T23:59:59Z", "2020-02-25T23:59:59Z", "2020-02-26T23:59:59Z", "2020-02-27T23:59:59Z", "2020-02-28T23:59:59Z" "2020-02-29T23:59:59Z", "2020-03-01T23:59:59Z" ]  |
+result                             | The result of the observation, here array number of new infections for each point in time included in the series | [ null, 0, null, 1, 2, 1, 1 ]
 
 ## Individual infection test/diagnosis data
 
