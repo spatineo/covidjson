@@ -1,4 +1,7 @@
-# COVID-JSON
+---
+layout: page
+title: Covid-JSON
+---
 
 **NOTE: this is a draft version**
 
