@@ -6,6 +6,32 @@ The data model is based on concepts of the international standard "Observations 
 
 Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [CoronaGISFinland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
 
+## Example (Infection statistics)
+
+```json
+{
+    "type" : "Feature",
+    "id": "f1a63a4f-d3b5-4b24-963f-124834290b97",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [ 24.93218, 60.19897 ]
+    },
+    "properties": {
+        "featureType": "MeasureObservation",
+        "phenomenonTimeStart": "2020-03-18T00:00:00+02:00",
+        "phenomenonTimeEnd": "2020-03-18T23:23:59+02:00",
+        "stimulusTime": "2020-03-20T00:00:00+02:00",
+        "resultTime": "2020-03-20T00:00:32+02:00",
+        "procedureName": "Spatial analysis of new infections by residential area of the tested subjects",
+        "procedureReference": "https://korona.thl.fi/tests/procedure/new-verified-infections-in-residential-area",
+        "observedPropertyTitle": "Number of new SARS-CoV-2 infections",
+        "observedProperty": "https://korona.thl.fi/tests/quantity/SARS-CoV-2-new-infections",
+        "observerName": "https://thl.fi/",
+        "ultimateFeatureOfInterestName": "Pasila, Helsinki, Finland",
+        "ultimateFeatureOfInterestReference": "https://sws.geonames.org/642554/about.rdf",
+        "result": 56
+    }
+```
 Mock data examples are available under [examples](https://github.com/ilkkarinne/covidjson/tree/master/examples).
 
 **Important**: all data contained in this repository is fictious. For up-to-date official information on the COVID-19 situation in Finland, see https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates
