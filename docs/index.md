@@ -32,7 +32,7 @@ Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [
 ```
 More data examples are available under [examples](https://github.com/ilkkarinne/covidjson/tree/master/examples).
 
-**Important**: all data contained in this repository is fictious. For up-to-date official information on the COVID-19 situation in Finland, see https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates
+**Important**: all data contained in this repository is fictious. For up-to-date official information on the COVID-19 situation in Finland, see [THL COVID-19 latest updates](https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates)
 
 ## Infection statistics (positive tests) per residental area
 
