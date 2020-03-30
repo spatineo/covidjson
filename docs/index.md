@@ -32,6 +32,9 @@ Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [
         "result": 56
     }
 ```
+The above feature rendered on a map:
+<script src="https://embed.github.com/view/geojson/ilkkarinne/covidjson/examples/sars-cov-2_case-statistics_neighbourhood.json"></script>
+
 Mock data examples are available under [examples](https://github.com/ilkkarinne/covidjson/tree/master/examples).
 
 **Important**: all data contained in this repository is fictious. For up-to-date official information on the COVID-19 situation in Finland, see https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates
