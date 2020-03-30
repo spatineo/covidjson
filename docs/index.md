@@ -1,4 +1,4 @@
-**NOTE: this is a draft version**
+**NOTE: this version may still change**
 
 A GeoJSON data model for viral infection testing data based on Observations & measurements standard ([O&M, ISO 19156](https://www.iso.org/standard/32574.html)) concepts. Created specifically for recording and exchanging data on SARS-CoV-2 infection tests, but likely applicable also to describing test data for detecting other infectious diseases too.
 
