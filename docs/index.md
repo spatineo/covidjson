@@ -3,6 +3,8 @@ title: CovidJSON
 description: Standards based GeoJSON data model for infection data
 ---
 
+**New**: Up-to-date SARS-CoV-2 data from Finland in CovidJSON format now available at [CovidJSON Data](http://data.covidjson.org/) 
+
 A GeoJSON data model for viral infection testing data based on Observations & measurements standard ([O&M, ISO 19156](https://www.iso.org/standard/32574.html)) concepts. Created specifically for recording and exchanging data on SARS-CoV-2 infection tests, but likely applicable also to describing test data for detecting other infectious diseases too.
 
 The data model is based on concepts of the international standard "Observations and measurements" (ISO 19156) that defines a conceptual model for describing observation events and their results as geospatial features. This specification uses an early draft proposal version of the ISO 19156 Edition 2 data model currently under preparation in the [OGC O&M Standards Working Group](https://github.com/opengeospatial/om-swg). The O&M GeoJSON mapping follows the proposed [O&M GeoJSON encoding profile](https://github.com/opengeospatial/omsf-profile/tree/master/omsf-json) by Ilkka Rinne.
