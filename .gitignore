@@ -1,0 +1,31 @@
+#
+# Standard Maven .gitignore
+#
+converter/target/
+converter/pom.xml.tag
+converter/pom.xml.releaseBackup
+converter/pom.xml.versionsBackup
+converter/pom.xml.next
+converter/release.properties
+converter/dependency-reduced-pom.xml
+converter/buildNumber.properties
+converter/.mvn/timing.properties
+converter/.editorconfig
+out
+.cache
+#
+# IntelliJ
+#
+*.iml
+.idea/*
+!.idea/runConfigurations/
+
+#
+# Visual Studio Code
+#
+.settings/
+.classpath
+.project
+.vscode/
+
+docs/.sass-cache

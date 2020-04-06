@@ -1,0 +1,22 @@
+{
+    "type" : "Feature",
+    "id": "foo",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [ 0.0, 0.0 ]
+    },
+    "properties": {
+        "featureType": "MeasureTimeseriesObservation",
+        "phenomenonTimeStart": null,
+        "phenomenonTimeEnd": null,
+        "resultTime": null,
+        "procedureName": "Daily new infection count by healthcare district",
+        "procedureReference": "https://covidjson.org/procedure/daily-new-verified-infections-by-hcd",
+        "observedPropertyTitle": "Number of new SARS-CoV-2 infections",
+        "observedProperty": "https://covidjson.org/quantity/SARS-CoV-2-cumulative-new-daily-infection-count-since-2020-02-24",
+        "observerName": "https://covidjson.org/thl-fi-epirapo-covid19case-api",
+        "ultimateFeatureOfInterestName": null,
+        "timeStep": [ ], 
+        "result": [ ]
+    }
+  }

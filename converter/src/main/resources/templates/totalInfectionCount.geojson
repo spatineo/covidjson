@@ -1,0 +1,21 @@
+{
+    "type" : "Feature",
+    "id": "foo",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [ 0.0, 0.0 ]
+    },
+    "properties": {
+        "featureType": "MeasureObservation",
+        "phenomenonTimeStart": null,
+        "phenomenonTimeEnd": null,
+        "resultTime": null,
+        "procedureName": "Total infection count by healthcare district",
+        "procedureReference": "https://covidjson.org/procedure/total-verified-infections-by-hcd",
+        "observedPropertyTitle": "Total number of SARS-CoV-2 infections",
+        "observedProperty": "https://covidjson.org/quantity/SARS-CoV-2-cumulative-infection-count",
+        "observerName": "https://covidjson.org/thl-fi-epirapo-covid19case-api",
+        "ultimateFeatureOfInterestName": null,
+        "result": null
+    }
+  }

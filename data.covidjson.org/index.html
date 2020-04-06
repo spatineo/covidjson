@@ -1,0 +1,105 @@
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" href="https://covidjson.org/assets/css/style.css"/>
+    <!-- link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.css"/ -->
+    <title>CovidJSON.org Public Datasets</title>
+    
+  <!-- script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.js"></script -->
+  <!-- script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script -->
+  <style>
+    #map_container {
+      width: 100%;
+      height: 400px;
+      display: flex;
+    }
+    #map {
+      height: 100%;
+      flex: 0 0 65%; 
+    }
+
+    #info {
+      height: 100%; 
+      flex: 1;
+      border-width: 1px;
+      border-color: black;
+    }
+  </style>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-21595267-13"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-21595267-13');
+</script>
+
+</head>
+<body>
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ilkkarinne/covidjson">View on GitHub</a>
+
+          <h1 id="project_title"><a href="https://covidjson.org/">CovidJSON</a> Data</h1>
+          
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>As a live examples of using CovidJSON for SARS-Cov-2 test data, the data sets listed below are currently being made available at this site.
+            The data used is extracted directly from the
+            <a href="https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/processedThlData">
+            Finnish coronavirus data API</a> provided by <a href="https://github.com/HS-Datadesk/koronavirus-avoindata">Helsingin Sanomat Datadesk</a> based on original data from 
+            <a href="https://thl.fi/fi/tilastot-ja-data/aineistot-ja-palvelut/avoin-data/varmistetut-koronatapaukset-suomessa-covid-19-">THL</a>.
+          
+            <p>See <a href="https://covidjson.org/">CovidJSON main page</a> for information on the initiative and the date model.</p>
+          
+            <p>A really basic (ugly) map just to demo showing the data on a map:</p>
+            <div id="map_container">
+              <div id="map"></div>
+              <div id="info"></div>
+            </div>
+            
+            <p>Datasets for download:
+                <ul>
+                <li>Cumulative total verified SARS-CoV-2 infection number by Finnish healthcare district: <a href="/fin_totalInfectionsByHealthCareDistrict.geojson">fin_totalInfectionsByHealthCareDistrict.geojson</a></li>
+                <li>Timeseries of daily new verified SARS-CoV-2 infections by Finnish healthcare district: <a href="/fin_newInfectionsTimeseriesByHealthCareDistrict.geojson">fin_newInfectionsTimeseriesByHealthCareDistrict.geojson</a></li>
+                </ul>
+            </p>
+
+            <p>CovidJSON data model and data conversion by Ilkka Rinne / Spatineo. Data conversion code based on the following remarkable work:
+                <ul>
+                    <li><a href="https://ngageoint.github.io/simple-features-geojson-java/">Simple Features GeoJSON Java</a> by the <a href="https://github.com/ngageoint">National Geospatial-Intelligence Agency</a></li>
+                    <li><a href="https://github.com/VuokkoH/koronavirus-avoindata">Health care district polygons in Finland</a> by <a href="https://github.com/VuokkoH">Vuokko Heikinheimo</a></li>
+                </ul>
+            </p>
+            <script>
+              var map;
+              function initMap() {
+                var infowindow = new google.maps.InfoWindow();
+                map = new google.maps.Map(document.getElementById('map'), {
+                  zoom: 4,
+                  center: {lat: 66.0538179, lng: 25.7496755}
+                });
+        
+                map.data.loadGeoJson(
+                    '/fin_totalInfectionsByHealthCareDistrict.geojson');
+
+                map.data.addListener('click', function(event) {
+                    var f = event.feature;
+                    document.getElementById('info').textContent = f.getProperty('ultimateFeatureOfInterestName') + '\n' + f.getProperty('observedPropertyTitle') + ':' + f.getProperty('result') + ', resultTime: ' + f.getProperty('resultTime');
+                });
+              }
+            </script>
+            <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCLQYLL6yjzHjamp4uyz5mLJlmmhi_rrQ&callback=initMap">
+            </script>
+      </section>
+    </div>
+  </body>
+</html>
