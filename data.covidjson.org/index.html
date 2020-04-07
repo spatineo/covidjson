@@ -4,39 +4,95 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
     <link rel="stylesheet" href="https://covidjson.org/assets/css/style.css"/>
-    <!-- link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.css"/ -->
     <title>CovidJSON.org Public Datasets</title>
-    
-  <!-- script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.js"></script -->
-  <!-- script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script -->
-  <style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
+    <style>
     #map_container {
       width: 100%;
-      height: 400px;
+      height: 600px;
       display: flex;
     }
     #map {
       height: 100%;
-      flex: 0 0 65%; 
+      flex: 0 0 45%; 
     }
 
     #info {
-      height: 100%; 
+      padding-left: 10px;
+      font-size: smaller;
+      height: 100%;
+      width: 100%; 
       flex: 1;
       border-width: 1px;
       border-color: black;
     }
+
+    #info table {
+      table-layout: fixed;
+    }
+
+    #info table tr td:nth-child(1) {
+      white-space: nowrap;
+    }
+
+    #info table tr td:nth-child(2) {
+      width: 99%;
+    }
   </style>
   <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-21595267-13"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-21595267-13"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'UA-21595267-13');
-</script>
+    gtag('config', 'UA-21595267-13');
+  </script>
+  <script>
+    var map;
 
+    function initMap() {
+      var infowindow = new google.maps.InfoWindow();
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 5,
+        center: {lat: 65.5538179, lng: 25.7496755}
+      });
+
+      map.data.setStyle({
+        fillColor: 'blue',
+        strokeWeight: 1
+      });
+
+      map.data.addListener('mouseover', function(event) {
+        map.data.revertStyle();
+        map.data.overrideStyle(event.feature, {fillColor: 'red'});
+          event.feature.forEachProperty(function(value, key) {
+            var fieldElement = document.getElementById(key);
+            if (fieldElement != null) {
+              if (fieldElement.tagName === 'A') {
+                fieldElement.setAttribute('href', value);
+              }
+              fieldElement.textContent = value;
+
+              if (key === 'result' && Array.isArray(value)) {
+                $('#' + key).sparkline('html', {type: 'bar'});
+              }
+            }
+          });
+      });
+
+      loadDataset('fin_totalInfectionsByHealthCareDistrict');
+    }
+
+    function loadDataset(name) {
+      map.data.forEach(function (feature) {
+        map.data.remove(feature);
+      });
+      map.data.loadGeoJson('/' + name + '.geojson');
+    }
+
+  </script>
 </head>
 <body>
     <div id="header_wrap" class="outer">
@@ -59,10 +115,31 @@
           
             <p>See <a href="https://covidjson.org/">CovidJSON main page</a> for information on the initiative and the date model.</p>
           
-            <p>A really basic (ugly) map just to demo showing the data on a map:</p>
+            <p>A really basic map just to demo showing the data:</p>
+            <form>
+              <label for="dataset">Choose a dataset:</label>
+              <select id="dataset_select" name="dataset" onchange="loadDataset(this.options[this.selectedIndex].value)">
+                <option value="fin_totalInfectionsByHealthCareDistrict">Total infection count</option>
+                <option value="fin_newInfectionsTimeseriesByHealthCareDistrict">Daily timeseries</option>
+              </select>
+            </form>
             <div id="map_container">
               <div id="map"></div>
-              <div id="info"></div>
+              <div id="info">
+                <table>
+                    <tr><td class="field_name">featureType</td><td class="field_value" id="featureType"></td></tr>
+                    <tr><td class="field_name">ultimateFeatureOfInterestName</td><td class="field_value" id="ultimateFeatureOfInterestName"></td></tr>
+                    <tr><td class="field_name">phenomenonTimeStart</td><td class="field_value" id="phenomenonTimeStart"></td></tr>
+                    <tr><td class="field_name">phenomenonTimeEnd</td><td class="field_value" id="phenomenonTimeEnd"></td></tr>
+                    <tr><td class="field_name">procedureName</td><td class="field_value" id="procedureName"></td></tr>
+                    <tr><td class="field_name">procedureReference</td><td class="field_value"><a href="" id="procedureReference"></a></td></tr>
+                    <tr><td class="field_name">observedPropertyTitle</td><td class="field_value" id="observedPropertyTitle"></td></tr>
+                    <tr><td class="field_name">observedProperty</td><td class="field_value"><a href="" id="observedProperty"></a></td></tr>
+                    <tr><td class="field_name">observerName</td><td class="field_value" id="observerName"></td></tr>
+                    <tr><td class="field_name">resultTime</td><td class="field_value" id="resultTime"></td></tr>
+                    <tr><td class="field_name">result</td><td class="field_value" id="result"></td></tr>
+                </table>
+              </div>
             </div>
             
             <p>Datasets for download:
@@ -78,24 +155,7 @@
                     <li><a href="https://github.com/VuokkoH/koronavirus-avoindata">Health care district polygons in Finland</a> by <a href="https://github.com/VuokkoH">Vuokko Heikinheimo</a></li>
                 </ul>
             </p>
-            <script>
-              var map;
-              function initMap() {
-                var infowindow = new google.maps.InfoWindow();
-                map = new google.maps.Map(document.getElementById('map'), {
-                  zoom: 4,
-                  center: {lat: 66.0538179, lng: 25.7496755}
-                });
-        
-                map.data.loadGeoJson(
-                    '/fin_totalInfectionsByHealthCareDistrict.geojson');
-
-                map.data.addListener('click', function(event) {
-                    var f = event.feature;
-                    document.getElementById('info').textContent = f.getProperty('ultimateFeatureOfInterestName') + '\n' + f.getProperty('observedPropertyTitle') + ':' + f.getProperty('result') + ', resultTime: ' + f.getProperty('resultTime');
-                });
-              }
-            </script>
+            
             <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCLQYLL6yjzHjamp4uyz5mLJlmmhi_rrQ&callback=initMap">
             </script>
