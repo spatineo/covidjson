@@ -14,7 +14,8 @@
         "procedureReference": "https://covidjson.org/procedure/total-verified-infections-by-region",
         "observedPropertyTitle": "Total number of SARS-CoV-2 infections",
         "observedProperty": "https://covidjson.org/quantity/SARS-CoV-2-cumulative-infection-count",
-        "observerName": "https://covidjson.org/thl-fi-epirapo-covid19case-api",
+        "observerName": "HS Datadesk open coronavirus data",
+        "observerReference": "https://github.com/HS-Datadesk/koronavirus-avoindata",
         "ultimateFeatureOfInterestName": null,
         "result": null
     }
