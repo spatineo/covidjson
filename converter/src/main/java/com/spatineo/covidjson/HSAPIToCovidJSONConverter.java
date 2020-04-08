@@ -216,7 +216,13 @@ public final class HSAPIToCovidJSONConverter {
                         ZonedDateTime d = ZonedDateTime.parse(dateNode.asText());
                         if (d.isAfter(startDate)) {
                             datesByDistrict.get(canonicalDistrictId).add(d);
-                            confirmedCasesByDistrict.get(canonicalDistrictId).add(valueNode.asInt());
+                            Integer value = null;
+                            if (valueNode.isNull()) {
+                                value = null;
+                            } else {
+                                value = valueNode.asInt();
+                            }
+                            confirmedCasesByDistrict.get(canonicalDistrictId).add(value);
                         }
                     }
                 }
