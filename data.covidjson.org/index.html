@@ -18,6 +18,10 @@
       flex: 0 0 45%; 
     }
 
+    #map img {
+      margin: 0 0 0 0;
+    }
+
     #info {
       padding-left: 10px;
       font-size: smaller;
@@ -67,22 +71,32 @@
       map.data.addListener('mouseover', function(event) {
         map.data.revertStyle();
         map.data.overrideStyle(event.feature, {fillColor: 'red'});
-          event.feature.forEachProperty(function(value, key) {
-            var fieldElement = document.getElementById(key);
-            if (fieldElement != null) {
-              if (fieldElement.tagName === 'A') {
-                fieldElement.setAttribute('href', value);
-              }
-              fieldElement.textContent = value;
-
-              if (key === 'result' && Array.isArray(value)) {
-                $('#' + key).sparkline('html', {type: 'bar'});
-              }
+        var isTimeseries = false;
+        event.feature.forEachProperty(function(value, key) {
+          var fieldElement = $('#' + key).first();
+          if (fieldElement != null) {
+            if (fieldElement.prop('tagName') === 'A') {
+              fieldElement.attr('href', value);
             }
-          });
+            if (key === 'timeStep' && Array.isArray(value)) {
+              isTimeseries = true;
+              fieldElement.text(value[0] + ', ..., ' + value[value.length - 1]);
+            } else 
+              fieldElement.text(value);
+            }
+            if (key === 'result' && Array.isArray(value)) {
+              $('#' + key).sparkline('html', {type: 'bar'});
+            }
+        });
+        if (!isTimeseries) {
+          $('#timeStepRow').hide();
+        } else {
+          $('#timeStepRow').show();
+        }
       });
 
       loadDataset('fin_totalInfectionsByHealthCareDistrict');
+      $('#timeStepRow').hide();
     }
 
     function loadDataset(name) {
@@ -136,7 +150,9 @@
                     <tr><td class="field_name">observedPropertyTitle</td><td class="field_value" id="observedPropertyTitle"></td></tr>
                     <tr><td class="field_name">observedProperty</td><td class="field_value"><a href="" id="observedProperty"></a></td></tr>
                     <tr><td class="field_name">observerName</td><td class="field_value" id="observerName"></td></tr>
+                    <tr><td class="field_name">observerReference</td><td class="field_value"><a href="" id="observerReference"></a></td></tr>
                     <tr><td class="field_name">resultTime</td><td class="field_value" id="resultTime"></td></tr>
+                    <tr id="timeStepRow"><td class="field_name">timeStep</td><td class="field_value" id="timeStep"></td></tr>
                     <tr><td class="field_name">result</td><td class="field_value" id="result"></td></tr>
                 </table>
               </div>
