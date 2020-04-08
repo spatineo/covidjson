@@ -55,6 +55,7 @@
   </script>
   <script>
     var map;
+    var maxValue = 0;
 
     function initMap() {
       var infowindow = new google.maps.InfoWindow();
@@ -63,15 +64,25 @@
         center: {lat: 65.5538179, lng: 25.7496755}
       });
 
-      map.data.setStyle({
-        fillColor: 'blue',
-        strokeWeight: 1
+      map.data.setStyle(function(feature){
+        var pctOfMax = 1;
+        var value = valueOrSum(feature.getProperty('result'));
+        if (Number.isFinite(value)) {
+          pctOfMax = maxValue / value;
+        }
+        var shaded = colorShade('#050588', pctOfMax*2 - 1);
+        return {
+          fillColor: shaded,
+          strokeWeight: 1,
+          fillOpacity: 0.35
+        }
       });
 
       map.data.addListener('mouseover', function(event) {
         map.data.revertStyle();
-        map.data.overrideStyle(event.feature, {fillColor: 'red'});
+        map.data.overrideStyle(event.feature, {fillColor: '#D80505'});
         var isTimeseries = false;
+        var timeSteps;
         event.feature.forEachProperty(function(value, key) {
           var fieldElement = $('#' + key).first();
           if (fieldElement != null) {
@@ -81,11 +92,17 @@
             if (key === 'timeStep' && Array.isArray(value)) {
               isTimeseries = true;
               fieldElement.text(value[0] + ', ..., ' + value[value.length - 1]);
+              timeSteps = value;
             } else 
               fieldElement.text(value);
             }
             if (key === 'result' && Array.isArray(value)) {
-              $('#' + key).sparkline('html', {type: 'bar'});
+              $('#' + key).sparkline('html', {
+                type: 'bar', 
+                tooltipFormatter: function(spark, opts, entry) {
+                  return '<div class="tooltip"><span class="tooltip_value">' + entry[0].value + ' new cases</span><br/><span class="tooltip_time">' + timeSteps[entry[0].offset] +'</span></div>';
+                }
+              });
             }
         });
         if (!isTimeseries) {
@@ -100,10 +117,51 @@
     }
 
     function loadDataset(name) {
-      map.data.forEach(function (feature) {
-        map.data.remove(feature);
+      $.getJSON('/' + name + '.geojson', function (collection) {
+        map.data.forEach(function (feature) {
+          map.data.remove(feature);
+        });
+        $('.field_value').text('');
+        maxValue = 0;
+        $.each(collection.features, function (key, feature) {
+          var value = valueOrSum(feature.properties.result);
+          if (Number.isFinite(value)) {
+            if (maxValue < value) {
+              maxValue = value;
+            }
+          }
+        });
+        map.data.addGeoJson(collection);
       });
-      map.data.loadGeoJson('/' + name + '.geojson');
+    }
+
+    function colorShade(hex, lum) {
+      // validate hex string
+      hex = String(hex).replace(/[^0-9a-f]/gi, '');
+      if (hex.length < 6) {
+          hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+      }
+      lum = lum || 0;
+      // convert to decimal and change luminosity
+      var rgb = "#", c, i;
+      for (i = 0; i < 3; i++) {
+          c = parseInt(hex.substr(i*2,2), 16);
+          c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+          rgb += ("00"+c).substr(c.length);
+      }
+      return rgb;
+    }
+
+    function valueOrSum(orig) {
+      var value = 0;
+      if (Array.isArray(orig)) {
+        $.each(orig, function(i, val){
+          value += val;
+        });
+      } else {
+        value = orig;
+      }
+      return value;
     }
 
   </script>
@@ -129,7 +187,7 @@
           
             <p>See <a href="https://covidjson.org/">CovidJSON main page</a> for information on the initiative and the date model.</p>
           
-            <p>A really basic map just to demo showing the data:</p>
+            <p>The benefit of using GeoJSON is that with a few lines of code you can get the data on a map similar to this:</p>
             <form>
               <label for="dataset">Choose a dataset:</label>
               <select id="dataset_select" name="dataset" onchange="loadDataset(this.options[this.selectedIndex].value)">
@@ -146,11 +204,11 @@
                     <tr><td class="field_name">phenomenonTimeStart</td><td class="field_value" id="phenomenonTimeStart"></td></tr>
                     <tr><td class="field_name">phenomenonTimeEnd</td><td class="field_value" id="phenomenonTimeEnd"></td></tr>
                     <tr><td class="field_name">procedureName</td><td class="field_value" id="procedureName"></td></tr>
-                    <tr><td class="field_name">procedureReference</td><td class="field_value"><a href="" id="procedureReference"></a></td></tr>
+                    <tr><td class="field_name">procedureReference</td><td><a href="" id="procedureReference" class="field_value"></a></td></tr>
                     <tr><td class="field_name">observedPropertyTitle</td><td class="field_value" id="observedPropertyTitle"></td></tr>
-                    <tr><td class="field_name">observedProperty</td><td class="field_value"><a href="" id="observedProperty"></a></td></tr>
+                    <tr><td class="field_name">observedProperty</td><td><a href="" id="observedProperty" class="field_value"></a></td></tr>
                     <tr><td class="field_name">observerName</td><td class="field_value" id="observerName"></td></tr>
-                    <tr><td class="field_name">observerReference</td><td class="field_value"><a href="" id="observerReference"></a></td></tr>
+                    <tr><td class="field_name">observerReference</td><td><a href="" id="observerReference"  class="field_value"></a></td></tr>
                     <tr><td class="field_name">resultTime</td><td class="field_value" id="resultTime"></td></tr>
                     <tr id="timeStepRow"><td class="field_name">timeStep</td><td class="field_value" id="timeStep"></td></tr>
                     <tr><td class="field_name">result</td><td class="field_value" id="result"></td></tr>
