@@ -1,16 +1,15 @@
 #
 # Standard Maven .gitignore
 #
-converter/target/
-converter/pom.xml.tag
-converter/pom.xml.releaseBackup
-converter/pom.xml.versionsBackup
-converter/pom.xml.next
-converter/release.properties
-converter/dependency-reduced-pom.xml
-converter/buildNumber.properties
-converter/.mvn/timing.properties
-converter/.editorconfig
+**/target/
+**/pom.xml.tag
+**/pom.xml.releaseBackup
+**/pom.xml.versionsBackup
+**/pom.xml.next
+**/release.properties
+**/dependency-reduced-pom.xml
+**/buildNumber.properties
+**/.editorconfig
 out
 .cache
 #
