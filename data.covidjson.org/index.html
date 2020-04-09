@@ -20,6 +20,7 @@
 
     #map img {
       margin: 0 0 0 0;
+      border:
     }
 
     #info {
@@ -56,9 +57,9 @@
   <script>
     var map;
     var maxValue = 0;
+    var selectedRegionId = null;
 
     function initMap() {
-      var infowindow = new google.maps.InfoWindow();
       map = new google.maps.Map(document.getElementById('map'), {
         zoom: 5,
         center: {lat: 65.5538179, lng: 25.7496755}
@@ -78,42 +79,53 @@
         }
       });
 
-      map.data.addListener('mouseover', function(event) {
+      map.data.addListener('click', function(event) {
         map.data.revertStyle();
-        map.data.overrideStyle(event.feature, {fillColor: '#D80505'});
-        var isTimeseries = false;
-        var timeSteps;
-        event.feature.forEachProperty(function(value, key) {
-          var fieldElement = $('#' + key).first();
-          if (fieldElement != null) {
-            if (fieldElement.prop('tagName') === 'A') {
-              fieldElement.attr('href', value);
-            }
-            if (key === 'timeStep' && Array.isArray(value)) {
-              isTimeseries = true;
-              fieldElement.text(value[0] + ', ..., ' + value[value.length - 1]);
-              timeSteps = value;
-            } else 
-              fieldElement.text(value);
-            }
-            if (key === 'result' && Array.isArray(value)) {
-              $('#' + key).sparkline('html', {
-                type: 'bar', 
-                tooltipFormatter: function(spark, opts, entry) {
-                  return '<div class="tooltip"><span class="tooltip_value">' + entry[0].value + ' new cases</span><br/><span class="tooltip_time">' + timeSteps[entry[0].offset] +'</span></div>';
-                }
-              });
-            }
-        });
-        if (!isTimeseries) {
-          $('#timeStepRow').hide();
+        if (selectedRegionId === event.feature.getId()) {
+          $('.field_value').text('');
+          selectedRegionId = null;
         } else {
-          $('#timeStepRow').show();
+          map.data.overrideStyle(event.feature, {fillColor: '#D80505'});
+          var isTimeseries = false;
+          var timeSteps;
+          event.feature.forEachProperty(function(value, key) {
+            var fieldElement = $('#' + key).first();
+            if (fieldElement != null) {
+              if (fieldElement.prop('tagName') === 'A') {
+                fieldElement.attr('href', value);
+              }
+              if (key === 'timeStep' && Array.isArray(value)) {
+                isTimeseries = true;
+                fieldElement.text(value[0] + ', ..., ' + value[value.length - 1]);
+                timeSteps = value;
+              } else 
+                fieldElement.text(value);
+              }
+              if (key === 'result' && Array.isArray(value)) {
+                $('#' + key).sparkline('html', {
+                  type: 'line',
+                  width: '100%',
+                  lineColor: '#0000bf',
+                  spotColor: null,
+                  maxSpotColor: '#ff0000',
+                  minSpotColor: null,
+                  drawNormalOnTop: false,
+                  tooltipFormatter: function(spark, opts, entry) {
+                    return '<div class="tooltip"><span class="tooltip_value">' + entry.y + ' new cases</span><br/><span class="tooltip_time">' + timeSteps[entry.offset] +'</span></div>';
+                  }
+                });
+              }
+          });
+          if (!isTimeseries) {
+            $('#timeStepRow').hide();
+          } else {
+            $('#timeStepRow').show();
+          }
+          selectedRegionId = event.feature.getId();
         }
       });
 
-      loadDataset('fin_totalInfectionsByHealthCareDistrict');
-      $('#timeStepRow').hide();
+      loadDataset('fin_newInfectionsTimeseriesByHealthCareDistrict');
     }
 
     function loadDataset(name) {
@@ -123,6 +135,7 @@
         });
         $('.field_value').text('');
         maxValue = 0;
+        selectedRegionId = null;
         $.each(collection.features, function (key, feature) {
           var value = valueOrSum(feature.properties.result);
           if (Number.isFinite(value)) {
@@ -192,7 +205,7 @@
               <label for="dataset">Choose a dataset:</label>
               <select id="dataset_select" name="dataset" onchange="loadDataset(this.options[this.selectedIndex].value)">
                 <option value="fin_totalInfectionsByHealthCareDistrict">Total infection count</option>
-                <option value="fin_newInfectionsTimeseriesByHealthCareDistrict">Daily timeseries</option>
+                <option value="fin_newInfectionsTimeseriesByHealthCareDistrict" selected="yes">Daily timeseries</option>
               </select>
             </form>
             <div id="map_container">
@@ -216,17 +229,18 @@
               </div>
             </div>
             
-            <p>Datasets for download:
+            <p>Exactly the same datasets are also available for download:
                 <ul>
                 <li>Cumulative total verified SARS-CoV-2 infection number by Finnish healthcare district: <a href="/fin_totalInfectionsByHealthCareDistrict.geojson">fin_totalInfectionsByHealthCareDistrict.geojson</a></li>
                 <li>Timeseries of daily new verified SARS-CoV-2 infections by Finnish healthcare district: <a href="/fin_newInfectionsTimeseriesByHealthCareDistrict.geojson">fin_newInfectionsTimeseriesByHealthCareDistrict.geojson</a></li>
                 </ul>
             </p>
 
-            <p>CovidJSON data model and data conversion by Ilkka Rinne / Spatineo. Data conversion code based on the following remarkable work:
+            <p>CovidJSON data model and data conversion by Ilkka Rinne / Spatineo. Data conversion and visualization code based on the following remarkable work:
                 <ul>
                     <li><a href="https://ngageoint.github.io/simple-features-geojson-java/">Simple Features GeoJSON Java</a> by the <a href="https://github.com/ngageoint">National Geospatial-Intelligence Agency</a></li>
                     <li><a href="https://github.com/VuokkoH/koronavirus-avoindata">Health care district polygons in Finland</a> by <a href="https://github.com/VuokkoH">Vuokko Heikinheimo</a></li>
+                    <li><a href="https://omnipotent.net/jquery.sparkline/">jQuery Sparklines</a> by <a href="http://omnipotent.net/">Gareth Watts</a></li>
                 </ul>
             </p>
             
