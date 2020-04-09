@@ -8,7 +8,7 @@ A GeoJSON data model for viral infection testing data based on OGC/ISO Observati
 The Observations and measurements defines a conceptual model for describing observation events and their results as geospatial features. This specification uses an early draft proposal version of the ISO 19156 Edition 2 data model currently under preparation in the [OGC O&M Standards Working Group](https://github.com/opengeospatial/om-swg). The O&M GeoJSON mapping follows the proposed [O&M GeoJSON encoding profile](https://github.com/opengeospatial/omsf-profile/tree/master/omsf-json) by Ilkka Rinne.
 
 The CovidJSON provides a data model for two primary epidemia related use cases:
-* [Individual test cases](#infection-tests-and-contact-tracking) with traceable locations of the sampling, analysis, and the residential area of the tested subject, and
+* [Individual test cases](#infection-tests-and-contact-tracking) with traceable locations of the sampling, analysis, and the residential area of the tested subject, as well as contact tracking, and
 * [Regional infection statistics](#regional-infection-statistics), such as numbers of infection tests carried out or number of positive infection test results
 
 Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [CoronaGISFinland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
