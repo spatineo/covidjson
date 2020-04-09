@@ -82,12 +82,47 @@
         "coordinates": [ 24.93218, 60.19897 ]
     },
     "properties": {
-        "featureType": "TestSubject",
+        "featureType": "Subject",
         "species": "human",
         "ageYears": 65,
         "gender": "male",
         "placeOfResidenceName": "Pasila, Helsinki, Finland",
         "placeOfResidenceReference": "https://sws.geonames.org/642554/about.rdf"
     }
-  }]
+  },
+  {
+    "type" : "Feature",
+    "id": "b2edfb3b-3960-421f-a7f5-1fd8f7f9ed3d",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [ 24.93218, 60.19897 ]
+    },
+    "properties": {
+        "featureType": "Subject",
+        "species": "human",
+        "ageYears": 50,
+        "gender": "female",
+        "placeOfResidenceName": "Kamppi, Helsinki, Finland",
+        "placeOfResidenceReference": "https://www.geonames.org/654498/about.rdf"
+    }
+  },
+  {
+    "type" : "Feature",
+    "id": "fcdcb386-e6e2-4be7-ab8c-0928992456a6",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [ 24.93218, 60.19897 ]
+    },
+    "properties": {
+        "featureType": "ContactEvent",
+        "enterTime": "2020-03-18T12:05:03Z",
+        "exitTime": "2020-03-18T12:05:31Z",
+        "proximityLimit": 15,
+        "minimumDistance": 0.7,
+        "distanceAccuracy": 0.5,
+        "subjectReference": "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5",
+        "contactedSubjectReference": "https://korona.thl.fi/tests/api/collections/subjects/items/b2edfb3b-3960-421f-a7f5-1fd8f7f9ed3d"
+    }
+  }
+]
 }
