@@ -25,6 +25,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import mil.nga.sf.geojson.Feature;
 import mil.nga.sf.geojson.FeatureCollection;
@@ -35,8 +38,9 @@ import mil.nga.sf.geojson.Geometry;
  * Simple conversion tool for producing sample CovidJSON files from coronavirus data fetched from the HS API
  * @author Ilkka Rinne / Spatineo 2020
  * */
-public final class HSAPIToCovidJSONConverter {
-    private static final Logger LOGGER = Logger.getLogger(FeatureConverter.class.getName());
+@SpringBootApplication
+public class HSAPIToCovidJSONConverter implements CommandLineRunner {
+    private static final Logger LOGGER = Logger.getLogger(HSAPIToCovidJSONConverter.class.getName());
 
     private static final Map<String, String> HS_DISTRICT_ID_TO_CANONICAL_IDS;
     private static final Map<String, String> DISTRICT_NAMES;
@@ -102,38 +106,15 @@ public final class HSAPIToCovidJSONConverter {
         HS_DISTRICT_ID_TO_CANONICAL_IDS = m;
     }
 
-    private HSAPIToCovidJSONConverter() {
+    public HSAPIToCovidJSONConverter() {
     }
 
     /**
      */
     public static void main(String[] args) throws IOException {
-        LOGGER.info("Starting");
-        try {
-            loadDataHSPreProcessed(); 
-            FeatureCollection totalCollection = new FeatureCollection();
-            FeatureCollection timeseriesCollection = new FeatureCollection();
-            for (String districtName : DISTRICT_NAMES.keySet()) {
-                Feature f = getTotalInfectionsForDistrictObservation(districtName);
-                if (f != null) {
-                    totalCollection.addFeature(f);
-                }
-                f = getInfectionTimeseriesForDistrictObservation(districtName);
-                if (f != null) {
-                    timeseriesCollection.addFeature(f);
-                }
-            }
-            File totalFile = new File(outputPath, "fin_totalInfectionsByHealthCareDistrict.geojson");
-            File timeseriesFile = new File(outputPath, "fin_newInfectionsTimeseriesByHealthCareDistrict.geojson");
-            LOGGER.info("Writing total infection data to " + totalFile.getAbsolutePath());
-            FileUtils.writeStringToFile(totalFile, FeatureConverter.toStringValue(totalCollection), Charset.forName("UTF-8"));
-            LOGGER.info("Writing new infections timeseries data to " + timeseriesFile.getAbsolutePath());
-            FileUtils.writeStringToFile(timeseriesFile, FeatureConverter.toStringValue(timeseriesCollection), Charset.forName("UTF-8"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            LOGGER.info("Exiting");
-        }
+        LOGGER.info("STARTING THE APPLICATION");
+        SpringApplication.run(HSAPIToCovidJSONConverter.class, args);
+        LOGGER.info("APPLICATION FINISHED");
     }
 
 
@@ -298,5 +279,28 @@ public final class HSAPIToCovidJSONConverter {
             retval = FeatureConverter.toFeature(content);
         }
         return retval;
+    }
+
+    @Override
+    public void run(String... arg0) throws Exception {
+        loadDataHSPreProcessed(); 
+        FeatureCollection totalCollection = new FeatureCollection();
+        FeatureCollection timeseriesCollection = new FeatureCollection();
+        for (String districtName : DISTRICT_NAMES.keySet()) {
+            Feature f = getTotalInfectionsForDistrictObservation(districtName);
+            if (f != null) {
+                totalCollection.addFeature(f);
+            }
+            f = getInfectionTimeseriesForDistrictObservation(districtName);
+            if (f != null) {
+                timeseriesCollection.addFeature(f);
+            }
+        }
+        File totalFile = new File(outputPath, "fin_totalInfectionsByHealthCareDistrict.geojson");
+        File timeseriesFile = new File(outputPath, "fin_newInfectionsTimeseriesByHealthCareDistrict.geojson");
+        LOGGER.info("Writing total infection data to " + totalFile.getAbsolutePath());
+        FileUtils.writeStringToFile(totalFile, FeatureConverter.toStringValue(totalCollection), Charset.forName("UTF-8"));
+        LOGGER.info("Writing new infections timeseries data to " + timeseriesFile.getAbsolutePath());
+        FileUtils.writeStringToFile(timeseriesFile, FeatureConverter.toStringValue(timeseriesCollection), Charset.forName("UTF-8"));
     }
 }
