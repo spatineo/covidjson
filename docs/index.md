@@ -52,14 +52,14 @@ These feature types support data exchange about individual tests carried out (po
 
 The contact event would typically be used in scenarios where there is a positive test result for the infection for a subject, and there is a need to trace close or proximate contacts the subject has had with other subjects which may have caused the infection to spread. The ContactEvent modelled here may be used both for known proximate contacts within a closed or limited space during a specific time period (the geometry of the space optionally provided), or contacts recorded by proximity sensing devices, geofencing or remote sensing (the point of the closest measured inter-subject distance as the geometry optionally provided with proximity limit radius). The proximity limit and the duration of the event also give a crude estimate of the relative average speed difference of the subjects during the event (stopped to chat, or passed-by while jogging).
 
-In cases where the location of the contact event is not recorded / provided for privacy reasons, the ContactEvent ```geometry``` property should given with an empty ```coordinates``` property be as follows:
+**Note**: In cases where the location of the contact event is not recorded / provided for privacy reasons, the ContactEvent ```geometry``` property should given with ```type``` "Polygon" and an empty ```coordinates``` property be as follows:
 ```json
 {
     "type" : "Feature",
     "id": "fcdcb386-e6e2-4be7-ab8c-0928992456a6",
     "geometry": {
-        "type": "Point",
-        "coordinates": []
+        "type": "Polygon",
+        "coordinates": [ ]
     },
     "properties": {
         "featureType": "ContactEvent",
