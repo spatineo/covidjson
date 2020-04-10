@@ -140,7 +140,7 @@ geometry                            | The point location or geometry of the plac
 featureType                         | Feature type, always ```ContactEvent```   | "ContactEvent" |
 enterTime                           | Beginning of the time period where the subjects were in proximate contact with each other | "2020-03-18T12:05:03Z" |
 exitTime                            | End of the time period where the subjects were in proximate contact with each other | "2020-03-18T12:05:31Z"|
-proximityLimit                      | Upper limit of the inter-subject distance determned as a proximate contact in meters | 20 |   
+proximityLimit                      | Upper limit of the inter-subject distance determined as a proximate contact in meters | 20 |   
 minimumDistance                     | Minimum recorded or approximated distance in meters from the other subject during the contact, if available | 0.7 |
 distanceAccuracy                    | The accuracy of the minimum distance during the contact in meters | 0.5 |
 subjectReference                    | Reference to the subject recording the contact or upstream in contact tracing chain (points to Subject) | "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5" |
