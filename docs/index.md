@@ -13,7 +13,7 @@ The CovidJSON provides a data model for two primary epidemia related use cases:
 
 For up-to-date SARS-CoV-2 regional statistics from Finland in CovidJSON format see [CovidJSON Data](http://data.covidjson.org/).
 
-Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [CoronaGISFinland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
+Initially developed by Ilkka Rinne, the chair of the OGC Observations and measurements Standards Working Group (O&M SWG) and leader of the ISO/Technical committee 211 project for revising ISO 19156. This work was done as part of the actions of the [CoronaGISFinland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
 
 **Example (Infection statistics)**
 
