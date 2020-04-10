@@ -1,14 +1,14 @@
 ---
 title: CovidJSON
-description: GeoJSON profile for exchange for viral infections tests, contact tracking and regional statistics data  
+description: GeoJSON profile for exchange of viral infections tests, contact tracing and regional statistics data  
 ---
 
-A GeoJSON data model for exchanging data for viral infection tests, contact events used for contact tracking and regional infection statistics. The model is based on OGC/ISO Observations & measurements Standard ([O&M, ISO 19156](https://www.iso.org/standard/32574.html)) concepts. Created specifically for recording and exchanging data on SARS-CoV-2 infection tests, but likely applicable also to describing test data for detecting other infectious diseases too.
+A GeoJSON data model for exchanging data for viral infection tests, contact events used for contact tracing and regional infection statistics. The model is based on OGC/ISO Observations & measurements Standard ([O&M, ISO 19156](https://www.iso.org/standard/32574.html)) concepts. Created specifically for recording and exchanging data on SARS-CoV-2 infection tests, but likely applicable also to describing test data for detecting other infectious diseases too.
 
 The Observations and measurements defines a conceptual model for describing observation events and their results as geospatial features. This specification uses an early draft proposal version of the ISO 19156 Edition 2 data model currently under preparation in the [OGC O&M Standards Working Group](https://github.com/opengeospatial/om-swg). The O&M GeoJSON mapping follows the proposed [O&M GeoJSON encoding profile](https://github.com/opengeospatial/omsf-profile/tree/master/omsf-json) by Ilkka Rinne.
 
 The CovidJSON provides a data model for two primary epidemia related use cases:
-* [Individual test cases](#infection-tests-and-contact-tracking) with traceable locations of the sampling, analysis, and the residential area of the tested subject, as well as contact tracking, and
+* [Individual test cases](#infection-tests-and-contact-tracing) with traceable locations of the sample taking, analysis of the sample, and the residential area of the tested subject, as well as proximate contact events used for infection tracing, and
 * [Regional infection statistics](#regional-infection-statistics), such as numbers of infection tests carried out or number of positive infection test results
 
 Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [CoronaGISFinland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
@@ -44,11 +44,35 @@ More data examples are available under [examples](https://github.com/ilkkarinne/
 **Note**: all data contained in the examples folder is fictious. For up-to-date official information on the COVID-19 situation in Finland, see [THL COVID-19 latest updates](https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates)
 
 
-## Infection tests and contact tracking
+## Infection tests and contact tracing
 
-These feature types support data exchange about individual tests carried out (positive or negative) on a test subject and about events in place and time where a subject has been known to be in close or proximate contact with another subject. The subjects have a unique identifier (in most cases not traceable to an actual person), and may have some basic properties (sex, age, place of residence).
+These feature types support data exchange about individual tests carried out (positive or negative) on a test subject and about events time (and optionally space) when a subject has been known to be in close or proximate contact with another subject. The subjects have a unique identifier (in most cases not traceable to an actual person), and may have some basic properties (sex, age, place of residence).
 
-The contact event would typically be used in scenarios where there is a positive test result for the infection for a subject, and there is a need to track close or proximate contacts the subject has had with other subjects which may have caused the infection to spread. The ContactEvent modelled here may be used both for known proximate contacts within a closed or limited space during a specici time period (the geometry of the space provided), or contacts recorded by proximity sensing devices, geofencing or remote sensing (the point of the closest measured inter-subject distance as the geometry with proximity limit radius). The proximity limit and the duration of the event also give a crude estimate of the relative average speed difference of the subjects during the event (stopped to chat, or passed-by while jogging).
+The contact event would typically be used in scenarios where there is a positive test result for the infection for a subject, and there is a need to trace close or proximate contacts the subject has had with other subjects which may have caused the infection to spread. The ContactEvent modelled here may be used both for known proximate contacts within a closed or limited space during a specific time period (the geometry of the space optionally provided), or contacts recorded by proximity sensing devices, geofencing or remote sensing (the point of the closest measured inter-subject distance as the geometry optionally provided with proximity limit radius). The proximity limit and the duration of the event also give a crude estimate of the relative average speed difference of the subjects during the event (stopped to chat, or passed-by while jogging).
+
+In cases where the location of the contact event is not recorded / provided for privacy reasons, the ContactEvent ```geometry``` property should given with an empty ```coordinates``` property be as follows:
+```json
+{
+    "type" : "Feature",
+    "id": "fcdcb386-e6e2-4be7-ab8c-0928992456a6",
+    "geometry": {
+        "type": "Point",
+        "coordinates": []
+    },
+    "properties": {
+        "featureType": "ContactEvent",
+        ...
+    }
+}
+```
+This is inline with how the ```null``` geometries are recommended to be defined in GeoJSON [RFC 7946, section 3.1 "Geometry object"](https://tools.ietf.org/html/rfc7946#section-3.1):
+> o  A GeoJSON Geometry object of any type other than
+      "GeometryCollection" has a member with the name "coordinates".
+      The value of the "coordinates" member is an array.  The structure
+      of the elements in this array is determined by the type of
+      geometry.  GeoJSON processors MAY interpret Geometry objects with
+      empty "coordinates" arrays as null objects.
+
 
 ### Single testing event feature (O&M TruthObservation)
 
@@ -110,15 +134,15 @@ placeOfResidenceReference           | Reference to the description of the place 
 
 GeoJSON property                    | Description                                  | Example value
 ------------------------------------|----------------------------------------------|--------------
-geometry                            | The point location or geometry of the place of the recorded a close or proximate contact with another subject | |
+geometry                            | The point location or geometry of the place of the recorded a close or proximate contact with another subject. Provided with an empty ```coordinates``` array if no location is given | |
 featureType                         | Feature type, always ```ContactEvent```   | "ContactEvent" |
 enterTime                           | Beginning of the time period where the subjects were in proximate contact with each other | "2020-03-18T12:05:03Z" |
 exitTime                            | End of the time period where the subjects were in proximate contact with each other | "2020-03-18T12:05:31Z"|
 proximityLimit                      | Radius of the circle in meters within which the subject was from the contacted subject during the event time period | 20 |   
 minimumDistance                     | Minimum recorded or approximated distance in meters from the other subject during the contact, if available | 0.7 |
 distanceAccuracy                    | The accuracy of the minimum distance during the contact in meters | 0.5 |
-subjectReference                    | Reference to the subject recording the contact or upstream in contact tracking chain (points to Subject) | "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5" |
-contactedSubjectReference           | Reference to the subject downstream in contact tracking chain (points to Subject) | "https://korona.thl.fi/tests/api/collections/subjects/items/b2edfb3b-3960-421f-a7f5-1fd8f7f9ed3d" |
+subjectReference                    | Reference to the subject recording the contact or upstream in contact tracing chain (points to Subject) | "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5" |
+contactedSubjectReference           | Reference to the subject downstream in contact tracing chain (points to Subject) | "https://korona.thl.fi/tests/api/collections/subjects/items/b2edfb3b-3960-421f-a7f5-1fd8f7f9ed3d" |
 
 ## Regional infection statistics
 
