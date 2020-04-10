@@ -46,7 +46,7 @@ More data examples are available under [examples](https://github.com/ilkkarinne/
 
 ## Infection tests and contact tracking
 
-These feature types support data exchange about individual tests carried out (positive or negative) on a test subject and about events in place and time where a subject has been known to be in close or proximate contact with another subject. The subjects have a unique identifier not traceable to an actual person, and may have some basic properties (sex, age, place of residence).
+These feature types support data exchange about individual tests carried out (positive or negative) on a test subject and about events in place and time where a subject has been known to be in close or proximate contact with another subject. The subjects have a unique identifier (in most cases not traceable to an actual person), and may have some basic properties (sex, age, place of residence).
 
 The contact event would typically be used in scenarios where there is a positive test result for the infection for a subject, and there is a need to track close or proximate contacts the subject has had with other subjects which may have caused the infection to spread. The ContactEvent modelled here may be used both for known proximate contacts within a closed or limited space during a specici time period (the geometry of the space provided), or contacts recorded by proximity sensing devices, geofencing or remote sensing (the point of the closest measured inter-subject distance as the geometry with proximity limit radius). The proximity limit and the duration of the event also give a crude estimate of the relative average speed difference of the subjects during the event (stopped to chat, or passed-by while jogging).
 
