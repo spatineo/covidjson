@@ -110,8 +110,8 @@
     "type" : "Feature",
     "id": "fcdcb386-e6e2-4be7-ab8c-0928992456a6",
     "geometry": {
-        "type": "Point",
-        "coordinates": [ 24.93218, 60.19897 ]
+        "type": "Polygon",
+        "coordinates": [ ]
     },
     "properties": {
         "featureType": "ContactEvent",
