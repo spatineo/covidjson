@@ -1,6 +1,6 @@
 ---
 title: CovidJSON
-description: OGC/ISO Standards based GeoJSON data model for infection data
+description: GeoJSON profile for exchange for viral infections tests, contact tracking and regional statistics data  
 ---
 
 A GeoJSON data model for viral infection testing data based on OGC/ISO Observations & measurements Standard ([O&M, ISO 19156](https://www.iso.org/standard/32574.html)) concepts. Created specifically for recording and exchanging data on SARS-CoV-2 infection tests, but likely applicable also to describing test data for detecting other infectious diseases too.
