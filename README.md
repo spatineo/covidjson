@@ -7,6 +7,6 @@ See https://covidjson.org/ for more details.
 
 Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [CoronaGISFinland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
 
-Mock data examples are available under [examples](./examples/) and up-to-date data samples using real COVID-19 data at [CovidJSON Data](https://data.covidjson.org/).
+Mock data examples are available under [examples](./examples/). Up-to-date data samples using real COVID-19 data at [CovidJSON Data](https://data.covidjson.org/).
 
-**Important**: Data contained in the examples directory is fictious. For up-to-date official information on the COVID-19 situation in Finland, see https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates
+**Note**: Data contained in the examples directory is fictious. For up-to-date official information on the COVID-19 situation in Finland, see https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates

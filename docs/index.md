@@ -9,7 +9,9 @@ The Observations and measurements defines a conceptual model for describing obse
 
 The CovidJSON provides a data model for two primary epidemia related use cases:
 * [Individual test cases](#infection-tests-and-contact-tracing) with traceable locations of the sample taking, analysis of the sample, and the residential area of the tested subject, as well as proximate contact events used for infection tracing, and
-* [Regional infection statistics](#regional-infection-statistics), such as numbers of infection tests carried out or number of positive infection test results
+* [Regional infection statistics](#regional-infection-statistics), such as numbers of infection tests carried out or number of positive infection test results.
+
+For up-to-date SARS-CoV-2 regional statistics from Finland in CovidJSON format see [CovidJSON Data](http://data.covidjson.org/).
 
 Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [CoronaGISFinland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
 
@@ -39,7 +41,7 @@ Initially developed by Ilkka Rinne / Spatineo as part of the activities of the [
         "result": 56
     }
 ```
-More data examples are available under [examples](https://github.com/ilkkarinne/covidjson/tree/master/examples) and up-to-date SARS-CoV-2 regional statistics from Finland in CovidJSON format available at [CovidJSON Data](http://data.covidjson.org/) 
+More data examples are available under [examples](https://github.com/ilkkarinne/covidjson/tree/master/examples).
 
 **Note**: all data contained in the examples folder is fictious. For up-to-date official information on the COVID-19 situation in Finland, see [THL COVID-19 latest updates](https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates)
 
@@ -138,7 +140,7 @@ geometry                            | The point location or geometry of the plac
 featureType                         | Feature type, always ```ContactEvent```   | "ContactEvent" |
 enterTime                           | Beginning of the time period where the subjects were in proximate contact with each other | "2020-03-18T12:05:03Z" |
 exitTime                            | End of the time period where the subjects were in proximate contact with each other | "2020-03-18T12:05:31Z"|
-proximityLimit                      | Radius of the circle in meters within which the subject was from the contacted subject during the event time period | 20 |   
+proximityLimit                      | Upper limit of the inter-subject distance determned as a proximate contact in meters | 20 |   
 minimumDistance                     | Minimum recorded or approximated distance in meters from the other subject during the contact, if available | 0.7 |
 distanceAccuracy                    | The accuracy of the minimum distance during the contact in meters | 0.5 |
 subjectReference                    | Reference to the subject recording the contact or upstream in contact tracing chain (points to Subject) | "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5" |
