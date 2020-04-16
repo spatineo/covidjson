@@ -15,7 +15,35 @@ For up-to-date SARS-CoV-2 regional statistics from Finland in CovidJSON format s
 
 Initially developed by Ilkka Rinne, the chair of the OGC Observations and measurements Standards Working Group (O&M SWG) and leader of the ISO/Technical committee 211 project for revising ISO 19156. This work was done as part of the [Spatineo](https://www.spatineo.com/) contributions for the [CoronaGIS Finland](https://geoforum.fi/paikkatiedon-koronavirus-asiantuntijat/), the Finnish task expert force for leveraging GIS for helping the Finnish governmental organisations, communities and companies in mitigating the impact of the COVID-19 pandemia in 2020.
 
-**Example (Infection statistics)**
+**Example 1 (Individual SARS-CoV-2 test)**
+```json
+{
+    "type" : "Feature",
+    "id": "63d55408-39a1-4284-b413-9afb1aa86b52",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [ 24.93218, 60.19897 ]
+    },
+    "properties": {
+        "featureType": "TruthObservation",
+        "phenomenonTime": "2020-03-18T12:05:00Z",
+        "resultTime": "2020-03-20T12:01:25Z",
+        "procedureName": "SARS coronavirus 2 RNA [Presence] in Respiratory specimen by NAA with probe detection",
+        "procedureReference": "https://loinc.org/94500-6/",
+        "observedPropertyTitle": "SARS-CoV-2",
+        "observedProperty": "http://snomed.info/id/840533007",
+        "observerName": "Digital PCR#1, HUSLAB Kamppi",
+        "platformName": "HUSLAB - Laboratory of virology and immunology",
+        "platformReference": "https://korona.thl.fi/tests/api/collections/facilities/items/0f4d84ec-dabf-44c8-b133-973d80cbbed2",
+        "proximateFeatureOfInterestName": "Nasopharyngeal swab sample",
+        "proximateFeatureOfInterestReference": "https://korona.thl.fi/tests/api/collections/samplings/items/bfed92c2-dca6-4ac0-9b4e-9ceb4ff90f42",
+        "ultimateFeatureOfInterestReference": "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5",
+        "result": true
+    }
+  },
+```
+
+**Example 2 (Infection statistics)**
 
 ```json
 {
@@ -41,6 +69,7 @@ Initially developed by Ilkka Rinne, the chair of the OGC Observations and measur
         "result": 56
     }
 ```
+
 More data examples are available under [examples](https://github.com/ilkkarinne/covidjson/tree/master/examples).
 
 **Note**: all data contained in the examples folder is fictious. For up-to-date official information on the COVID-19 situation in Finland, see [THL COVID-19 latest updates](https://thl.fi/en/web/infectious-diseases/what-s-new/coronavirus-covid-19-latest-updates)
