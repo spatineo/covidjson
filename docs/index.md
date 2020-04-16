@@ -40,7 +40,7 @@ Initially developed by Ilkka Rinne, the chair of the OGC Observations and measur
         "ultimateFeatureOfInterestReference": "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5",
         "result": true
     }
-  },
+  }
 ```
 
 **Example 2 (Infection statistics)**
