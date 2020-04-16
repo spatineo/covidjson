@@ -84,10 +84,10 @@ geometry                            | The representative point location of the p
 featureType                         | O&M Observation type, always ```TruthObservation``` | "TruthObservation" |
 phenomenonTime                      | Time when observed phenomenon was happening, here the time when the sample was taken | "2020-03-18T12:05:00Z" |
 resultTime                          | Time of the recording or making the Observation result available, here the time when the infection result (true/false) was available/recorded | "2020-03-19T13:01:25Z" |
-procedureName                       | Name of the method used for creating the Observation | "Reverse transcription polymerase chain reaction (rRT-PCR)" or "Medical diagnosis" |
-procedureReference                  | Reference to the description of the method. Primary importance as an identifier of the various test methods | "https://korona.thl.fi/tests/procedure/rRT-PCR" |
+procedureName                       | Name of the method used for creating the Observation | "SARS coronavirus 2 RNA [Presence] in Respiratory specimen by NAA with probe detection" or "Medical diagnosis" |
+procedureReference                  | Reference to the description of the method. Primary importance as an identifier of the various test methods | "https://loinc.org/94500-6/" |
 observedPropertyTitle               | Title of the observed property, here the infection kind | "SARS-CoV-2 infection"
-observedProperty                    | Reference to the description of the observed property | "https://korona.thl.fi/tests/quantity/SARS-CoV-2-infection"
+observedProperty                    | Reference to the description of the observed property | "http://snomed.info/id/840533007"
 observerName                        | Kind of the sensor / analysis instrument / person acting creating the result from the sample | "Acme PCR Analyzer 2000" or "medical doctor" |
 platformName                        | Name of the entity hosting the Observer | "HUSLAB - Laboratory of virology and immunology"
 platformReference                   | Reference to the description of the entity hosting the Observer  (points to MedicalFacility) | "https://korona.thl.fi/tests/api/collections/facilities/items/0f4d84ec-dabf-44c8-b133-973d80cbbed2" |
@@ -116,7 +116,8 @@ geometry                            | The point location of the place where the 
 featureType                         | Feature type, always ```Sampling```   | "Sampling" |
 samplingFacilityName                | Name of the facility where the sample was taken | "HUSLAB - Kamppi" |
 samplingFacilityReference           | Reference to the description of the facility where the sample was taken (points to MedicalFacility) | "https://korona.thl.fi/tests/api/collections/facilities/items/d9a1ba35-c8af-4d0d-94b7-1e314f27d7aa" |
-sampleType                          | Kind of the sample captured during sampling | "Nasopharyngeal swab" |
+sampleTypeName                      | Name for the kind of the sample captured during sampling | "Nasopharyngeal swab" |
+sampleTypeReference                 | Identifier for the kind of the sample captured during sampling | http://snomed.info/id/258500001 |
 sampledFeatureReference             | Reference to the description of the subject of the sampling, here the person / animal tested for (points to the Subject) | "https://korona.thl.fi/tests/api/collections/subjects/items/52da6d1b-1fa7-47ee-8044-ae4851b4d3a5" |
 samplingTime                        | Time when the sample was taken | "2020-03-18T12:05:00Z"
 
