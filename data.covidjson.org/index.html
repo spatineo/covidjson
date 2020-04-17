@@ -71,11 +71,11 @@
         if (Number.isFinite(value)) {
           pctOfMax = (value - minValue) / (maxValue - minValue);
         }
-        var shaded = colorShade('#050588', pctOfMax*2 - 1);
+        var shaded = colorShade('#8585F8', (1.0 - pctOfMax)*2 - 1);
         return {
           fillColor: shaded,
           strokeWeight: 1,
-          fillOpacity: 0.35
+          fillOpacity: 0.65
         }
       });
 
