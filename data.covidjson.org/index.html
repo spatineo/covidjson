@@ -56,6 +56,7 @@
   <script>
     var map;
     var maxValue = 0;
+    var minValue = Number.MAX_VALUE;
     var selectedRegionId = null;
 
     function initMap() {
@@ -68,7 +69,7 @@
         var pctOfMax = 1;
         var value = valueOrSum(feature.getProperty('result'));
         if (Number.isFinite(value)) {
-          pctOfMax = maxValue / value;
+          pctOfMax = (value - minValue) / (maxValue - minValue);
         }
         var shaded = colorShade('#050588', pctOfMax*2 - 1);
         return {
@@ -134,12 +135,16 @@
         });
         $('.field_value').text('');
         maxValue = 0;
+        minValue = Number.MAX_VALUE;
         selectedRegionId = null;
         $.each(collection.features, function (key, feature) {
           var value = valueOrSum(feature.properties.result);
           if (Number.isFinite(value)) {
             if (maxValue < value) {
               maxValue = value;
+            }
+            if (minValue > value) {
+              minValue = value;
             }
           }
         });
