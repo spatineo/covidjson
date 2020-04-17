@@ -10,7 +10,7 @@
         "phenomenonTimeStart": null,
         "phenomenonTimeEnd": null,
         "resultTime": null,
-        "procedureName": "Number of tests per population by region",
+        "procedureName": "Number of tests by region",
         "procedureReference": "https://covidjson.org/procedure/tests-by-region",
         "observedPropertyTitle": "Total number of SARS-CoV-2 tests",
         "observedProperty": "https://covidjson.org/quantity/SARS-CoV-2-test-count",
