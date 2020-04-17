@@ -168,10 +168,10 @@
       var value = 0;
       if (Array.isArray(orig)) {
         $.each(orig, function(i, val){
-          value += val;
+          value += parseFloat(val);
         });
       } else {
-        value = orig;
+        value = parseFloat(orig);
       }
       return value;
     }
