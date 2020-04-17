@@ -125,7 +125,7 @@
         }
       });
 
-      loadDataset('fin_newInfectionsTimeseriesByHealthCareDistrict');
+      loadDataset('fin_incidenceByHealthCareDistrict');
     }
 
     function loadDataset(name) {
@@ -209,8 +209,8 @@
               <label for="dataset">Choose a dataset:</label>
               <select id="dataset_select" name="dataset" onchange="loadDataset(this.options[this.selectedIndex].value)">
                 <option value="fin_totalInfectionsByHealthCareDistrict">Total infection count</option>
-                <option value="fin_newInfectionsTimeseriesByHealthCareDistrict" selected="yes">Daily timeseries</option>
-                <option value="fin_incidenceByHealthCareDistrict">Incidence (cases per 100k residents)</option>
+                <option value="fin_newInfectionsTimeseriesByHealthCareDistrict">Daily timeseries</option>
+                <option value="fin_incidenceByHealthCareDistrict" selected="yes">Incidence (cases per 100k residents)</option>
                 <option value="fin_testsPerPopulationByHealthCareDistrict">Tests per 100k residents</option>
                 <option value="fin_positivesRatioByHealthCareDistrict">Per-mille of positives of all tests</option>
                 <option value="fin_totalTestsByHealthCareDistrict">Total test count</option>
