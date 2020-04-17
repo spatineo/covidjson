@@ -1,0 +1,22 @@
+{
+    "type" : "Feature",
+    "id": "foo",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [ 0.0, 0.0 ]
+    },
+    "properties": {
+        "featureType": "MeasureObservation",
+        "phenomenonTimeStart": null,
+        "phenomenonTimeEnd": null,
+        "resultTime": null,
+        "procedureName": "Ratio of tests with positive results by all results by region",
+        "procedureReference": "https://covidjson.org/procedure/ratio-of-positive-tests-to-all-by-region",
+        "observedPropertyTitle": "Per-mille of positive SARS-CoV-2 tests",
+        "observedProperty": "https://covidjson.org/quantity/SARS-CoV-2-positive-per-mille",
+        "observerName": "HS Datadesk open coronavirus data",
+        "observerReference": "https://github.com/HS-Datadesk/koronavirus-avoindata",
+        "ultimateFeatureOfInterestName": null,
+        "result": null
+    }
+  }

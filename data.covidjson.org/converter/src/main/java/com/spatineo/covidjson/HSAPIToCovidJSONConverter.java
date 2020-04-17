@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,10 +45,13 @@ public class HSAPIToCovidJSONConverter implements CommandLineRunner {
 
     private static final Map<String, String> HS_DISTRICT_ID_TO_CANONICAL_IDS;
     private static final Map<String, String> DISTRICT_NAMES;
-    private static final String API_URL= "https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/processedThlData";
+    private static final String API_URL_THL_PROCSSED= "https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/processedThlData";
+    private static final String API_URL_TEST_DATA = "https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/hcdTestData";
 
     private static Map<String, List<ZonedDateTime>> datesByDistrict = new HashMap<>();
     private static Map<String, List<Integer>> confirmedCasesByDistrict = new HashMap<>();
+    private static Map<String, Integer> testsByDistrict = new HashMap<>();
+    private static Map<String, Integer> populationByDistrict = new HashMap<>();
     private static Map<String, Geometry> geometryCache = new HashMap<>();
     private static Map<String, String> templateCache = new HashMap<>();
     private static ObjectMapper mapper = new ObjectMapper();
@@ -175,8 +179,119 @@ public class HSAPIToCovidJSONConverter implements CommandLineRunner {
         return retval;
     }
 
-    private static void loadDataHSPreProcessed() throws MalformedURLException, IOException {
-        JsonNode root = getHSData();
+    private static Feature getTestsPerPopulationForDistrictObservation(String districtId) {
+        Feature retval = null;
+        if (districtId != null) {
+            retval = getObservationTemplate("testsPer100kResidents");
+            List<ZonedDateTime> dates = datesByDistrict.get(districtId);
+            Integer testCount = testsByDistrict.get(districtId);
+            Integer population = populationByDistrict.get(districtId);
+            if (!dates.isEmpty() && testCount != null && population != null) {
+                ZonedDateTime phenomenonTimeStart = dates.get(0);
+                ZonedDateTime phenomenonTimeEnd = dates.get(dates.size() - 1);
+                ZonedDateTime resultTime = ZonedDateTime.now();
+                retval.setGeometry(getDistrictGeometry(districtId));
+                retval.setId(UUID.randomUUID().toString());
+                retval.getProperties().put("ultimateFeatureOfInterestName", DISTRICT_NAMES.get(districtId));
+                retval.getProperties().put("phenomenonTimeStart", phenomenonTimeStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("phenomenonTimeEnd", phenomenonTimeEnd.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("resultTime", resultTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("result", String.format(Locale.ROOT, "%.2f", (testCount.intValue()/population.doubleValue()) * 100000.0));
+            } else  {
+                LOGGER.warning("No data for district '" + districtId + "'");
+            }
+        } else {
+            LOGGER.warning("Unknown district '" + districtId + "'");
+        }
+        return retval;
+    }
+
+    private static Feature getNewCasesPerPopulationForDistrictObservation(String districtId) {
+        Feature retval = null;
+        if (districtId != null) {
+            retval = getObservationTemplate("incidencePer100kResidents");
+            List<ZonedDateTime> dates = datesByDistrict.get(districtId);
+            List<Integer> cases = confirmedCasesByDistrict.get(districtId);
+            Integer population = populationByDistrict.get(districtId);
+            if (!dates.isEmpty() && !cases.isEmpty() && population != null) {
+                Integer totalCases = cases.stream().reduce(0, (t, i) -> i!=null?t+i:t);
+                ZonedDateTime phenomenonTimeStart = dates.get(0);
+                ZonedDateTime phenomenonTimeEnd = dates.get(dates.size() - 1);
+                ZonedDateTime resultTime = ZonedDateTime.now();
+                retval.setGeometry(getDistrictGeometry(districtId));
+                retval.setId(UUID.randomUUID().toString());
+                retval.getProperties().put("ultimateFeatureOfInterestName", DISTRICT_NAMES.get(districtId));
+                retval.getProperties().put("phenomenonTimeStart", phenomenonTimeStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("phenomenonTimeEnd", phenomenonTimeEnd.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("resultTime", resultTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("result", String.format(Locale.ROOT, "%.2f", (totalCases.intValue()/population.doubleValue()) * 100000.0));
+            } else  {
+                LOGGER.warning("No data for district '" + districtId + "'");
+            }
+        } else {
+            LOGGER.warning("Unknown district '" + districtId + "'");
+        }
+        return retval;
+    }
+
+    private static Feature getNumberOfTestsForDistrictObservation(String districtId) {
+        Feature retval = null;
+        if (districtId != null) {
+            retval = getObservationTemplate("totalTestCount");
+            List<ZonedDateTime> dates = datesByDistrict.get(districtId);
+            Integer testCount = testsByDistrict.get(districtId);
+            if (!dates.isEmpty() && testCount != null) {
+                ZonedDateTime phenomenonTimeStart = dates.get(0);
+                ZonedDateTime phenomenonTimeEnd = dates.get(dates.size() - 1);
+                ZonedDateTime resultTime = ZonedDateTime.now();
+                retval.setGeometry(getDistrictGeometry(districtId));
+                retval.setId(UUID.randomUUID().toString());
+                retval.getProperties().put("ultimateFeatureOfInterestName", DISTRICT_NAMES.get(districtId));
+                retval.getProperties().put("phenomenonTimeStart", phenomenonTimeStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("phenomenonTimeEnd", phenomenonTimeEnd.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("resultTime", resultTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("result", testCount.intValue());
+            } else  {
+                LOGGER.warning("No data for district '" + districtId + "'");
+            }
+        } else {
+            LOGGER.warning("Unknown district '" + districtId + "'");
+        }
+        return retval;
+    }
+
+    private static Feature getCasesPerNumberOfTestsForDistrictObservation(String districtId) {
+        Feature retval = null;
+        if (districtId != null) {
+            retval = getObservationTemplate("permilleOfPositiveTests");
+            List<ZonedDateTime> dates = datesByDistrict.get(districtId);
+            List<Integer> cases = confirmedCasesByDistrict.get(districtId);
+            Integer testCount = testsByDistrict.get(districtId);
+            if (!dates.isEmpty() && !cases.isEmpty() && testCount != null) {
+                Integer totalCases = cases.stream().reduce(0, (t, i) -> i!=null?t+i:t);
+                ZonedDateTime phenomenonTimeStart = dates.get(0);
+                ZonedDateTime phenomenonTimeEnd = dates.get(dates.size() - 1);
+                ZonedDateTime resultTime = ZonedDateTime.now();
+                retval.setGeometry(getDistrictGeometry(districtId));
+                retval.setId(UUID.randomUUID().toString());
+                retval.getProperties().put("ultimateFeatureOfInterestName", DISTRICT_NAMES.get(districtId));
+                retval.getProperties().put("phenomenonTimeStart", phenomenonTimeStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("phenomenonTimeEnd", phenomenonTimeEnd.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("resultTime", resultTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                retval.getProperties().put("result", String.format(Locale.ROOT, "%.2f", (totalCases.intValue()/testCount.doubleValue()) * 1000.0));
+            } else  {
+                LOGGER.warning("No data for district '" + districtId + "'");
+            }
+        } else {
+            LOGGER.warning("Unknown district '" + districtId + "'");
+        }
+        return retval;
+    }
+
+
+
+    private static void loadTHLProcessedData() throws MalformedURLException, IOException {
+        JsonNode root = getTHLProcessedData();
         JsonNode confirmed = root.path("confirmed");
         Iterator<String> districtIds = confirmed.fieldNames();
         JsonNode timeseries = null;
@@ -210,8 +325,36 @@ public class HSAPIToCovidJSONConverter implements CommandLineRunner {
             } 
         }
     }
+
+    private static void loadTestsAndInfectionsData() throws MalformedURLException, IOException {
+        JsonNode root = getTestAndInfectionsData();
+        Iterator<String> districtIds = root.fieldNames();
+        JsonNode testCountNode = null;
+        JsonNode populationNode = null;
+        while (districtIds.hasNext()) {
+            String hsDistrictId = districtIds.next();
+            String canonicalDistrictId = HS_DISTRICT_ID_TO_CANONICAL_IDS.get(hsDistrictId);
+            if (canonicalDistrictId != null) {
+                testCountNode = root.path(hsDistrictId).path("tested");
+                populationNode = root.path(hsDistrictId).path("population");
+                Integer value = null;
+                if (testCountNode.isNull()) {
+                    value = null;
+                } else {
+                    value = testCountNode.asInt();
+                }
+                testsByDistrict.put(canonicalDistrictId, value);
+                if (populationNode.isNull()) {
+                    value = null;
+                } else {
+                    value = populationNode.asInt();
+                }
+                populationByDistrict.put(canonicalDistrictId, value);
+            }
+        }
+    }
    
-    private static JsonNode getHSData() throws IOException {
+    private static JsonNode getTHLProcessedData() throws IOException {
         JsonNode retval = null;
         LOGGER.info("Fetching data from HS API");
         File f = new File(cachePath, "hs_processedThlData.json");
@@ -220,7 +363,27 @@ public class HSAPIToCovidJSONConverter implements CommandLineRunner {
             LOGGER.info("Using local cache from file " + f.getAbsolutePath());
             retval = mapper.readTree(f);
         } else {
-            URL toFetch = new URL(API_URL);
+            URL toFetch = new URL(API_URL_THL_PROCSSED);
+            LOGGER.info("Fetching from " + toFetch.toExternalForm());
+            String data = IOUtils.toString(toFetch.openStream(), Charset.forName("UTF-8"));
+            if (cacheMaxAgeHours > 0) {
+                FileUtils.writeStringToFile(f, data, Charset.forName("UTF-8"));
+            }
+            retval = mapper.readTree(data);
+        }
+        return retval;
+    }
+
+    private static JsonNode getTestAndInfectionsData() throws IOException {
+        JsonNode retval = null;
+        LOGGER.info("Fetching data from HS API");
+        File f = new File(cachePath, "hs_testsAndInfectionsData.json");
+        long cacheExpiration = f.lastModified() + cacheMaxAgeHours * 60 * 60 * 1000;
+        if (f.exists() && cacheExpiration > System.currentTimeMillis()){
+            LOGGER.info("Using local cache from file " + f.getAbsolutePath());
+            retval = mapper.readTree(f);
+        } else {
+            URL toFetch = new URL(API_URL_TEST_DATA);
             LOGGER.info("Fetching from " + toFetch.toExternalForm());
             String data = IOUtils.toString(toFetch.openStream(), Charset.forName("UTF-8"));
             if (cacheMaxAgeHours > 0) {
@@ -283,24 +446,57 @@ public class HSAPIToCovidJSONConverter implements CommandLineRunner {
 
     @Override
     public void run(String... arg0) throws Exception {
-        loadDataHSPreProcessed(); 
-        FeatureCollection totalCollection = new FeatureCollection();
+        loadTHLProcessedData();
+        loadTestsAndInfectionsData();
+        FeatureCollection casesTotalCollection = new FeatureCollection();
         FeatureCollection timeseriesCollection = new FeatureCollection();
+        FeatureCollection incidenceCollection = new FeatureCollection();
+        FeatureCollection positivesRatioCollection = new FeatureCollection();
+        FeatureCollection testsPerPopulationCollection = new FeatureCollection();
+        FeatureCollection testsTotalCollection = new FeatureCollection();
         for (String districtName : DISTRICT_NAMES.keySet()) {
             Feature f = getTotalInfectionsForDistrictObservation(districtName);
             if (f != null) {
-                totalCollection.addFeature(f);
+                casesTotalCollection.addFeature(f);
             }
             f = getInfectionTimeseriesForDistrictObservation(districtName);
             if (f != null) {
                 timeseriesCollection.addFeature(f);
             }
+            f = getNewCasesPerPopulationForDistrictObservation(districtName);
+            if (f != null) {
+                incidenceCollection.addFeature(f);
+            }
+            f = getCasesPerNumberOfTestsForDistrictObservation(districtName);
+            if (f != null) {
+                positivesRatioCollection.addFeature(f);
+            }
+            f = getTestsPerPopulationForDistrictObservation(districtName);
+            if (f != null) {
+                testsPerPopulationCollection.addFeature(f);
+            }
+            f = getNumberOfTestsForDistrictObservation(districtName);
+            if (f != null) {
+                testsTotalCollection.addFeature(f);
+            }
         }
-        File totalFile = new File(outputPath, "fin_totalInfectionsByHealthCareDistrict.geojson");
+        File casesTotalFile = new File(outputPath, "fin_totalInfectionsByHealthCareDistrict.geojson");
         File timeseriesFile = new File(outputPath, "fin_newInfectionsTimeseriesByHealthCareDistrict.geojson");
-        LOGGER.info("Writing total infection data to " + totalFile.getAbsolutePath());
-        FileUtils.writeStringToFile(totalFile, FeatureConverter.toStringValue(totalCollection), Charset.forName("UTF-8"));
+        File incidenceFile = new File(outputPath, "fin_incidenceByHealthCareDistrict.geojson");
+        File positivesRatioFile = new File(outputPath, "fin_positivesRatioByHealthCareDistrict.geojson");
+        File testPerPopulationFile = new File(outputPath, "fin_testsPerPopulationByHealthCareDistrict.geojson");
+        File testTotalFile = new File(outputPath, "fin_totalTestsByHealthCareDistrict.geojson");
+        LOGGER.info("Writing total infection count data to " + casesTotalFile.getAbsolutePath());
+        FileUtils.writeStringToFile(casesTotalFile, FeatureConverter.toStringValue(casesTotalCollection), Charset.forName("UTF-8"));
         LOGGER.info("Writing new infections timeseries data to " + timeseriesFile.getAbsolutePath());
         FileUtils.writeStringToFile(timeseriesFile, FeatureConverter.toStringValue(timeseriesCollection), Charset.forName("UTF-8"));
+        LOGGER.info("Writing incidence data to " + incidenceFile.getAbsolutePath());
+        FileUtils.writeStringToFile(incidenceFile, FeatureConverter.toStringValue(incidenceCollection), Charset.forName("UTF-8"));
+        LOGGER.info("Writing positives ratio data to " + positivesRatioFile.getAbsolutePath());
+        FileUtils.writeStringToFile(positivesRatioFile, FeatureConverter.toStringValue(positivesRatioCollection), Charset.forName("UTF-8"));
+        LOGGER.info("Writing test per population data to " + testPerPopulationFile.getAbsolutePath());
+        FileUtils.writeStringToFile(testPerPopulationFile, FeatureConverter.toStringValue(testsPerPopulationCollection), Charset.forName("UTF-8"));
+        LOGGER.info("Writing tests total data to " + testTotalFile.getAbsolutePath());
+        FileUtils.writeStringToFile(testTotalFile, FeatureConverter.toStringValue(testsTotalCollection), Charset.forName("UTF-8"));
     }
 }

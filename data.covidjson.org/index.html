@@ -205,6 +205,10 @@
               <select id="dataset_select" name="dataset" onchange="loadDataset(this.options[this.selectedIndex].value)">
                 <option value="fin_totalInfectionsByHealthCareDistrict">Total infection count</option>
                 <option value="fin_newInfectionsTimeseriesByHealthCareDistrict" selected="yes">Daily timeseries</option>
+                <option value="fin_incidenceByHealthCareDistrict">Incidence (cases per 100k residents)</option>
+                <option value="fin_testsPerPopulationByHealthCareDistrict">Tests per 100k residents</option>
+                <option value="fin_positivesRatioByHealthCareDistrict">Per-mille of positives of all tests</option>
+                <option value="fin_totalTestsByHealthCareDistrict">Total test count</option>
               </select>
             </form>
             <div id="map_container">
@@ -232,6 +236,10 @@
                 <ul>
                 <li>Cumulative total verified SARS-CoV-2 infection number by Finnish healthcare district: <a href="/fin_totalInfectionsByHealthCareDistrict.geojson">fin_totalInfectionsByHealthCareDistrict.geojson</a></li>
                 <li>Timeseries of daily new verified SARS-CoV-2 infections by Finnish healthcare district: <a href="/fin_newInfectionsTimeseriesByHealthCareDistrict.geojson">fin_newInfectionsTimeseriesByHealthCareDistrict.geojson</a></li>
+                <li>Incidence (total verified SARS-CoV-2 infection number per 100k residents) by Finnish healthcare district: <a href="/fin_incidenceByHealthCareDistrict.geojson">fin_incidenceByHealthCareDistrict.geojson</a></li>
+                <li>SARS-CoV-2 infection tests per 100k residents by Finnish healthcare district: <a href="/fin_testsPerPopulationByHealthCareDistrict.geojson">fin_testsPerPopulationByHealthCareDistrict.geojson</a></li>
+                <li>Per-mille ratio of positive test results to all tests for SARS-CoV-2 infections by Finnish healthcare district: <a href="/fin_positivesRatioByHealthCareDistrict.geojson">fin_positivesRatioByHealthCareDistrict.geojson</a></li>
+                <li>Total number of tests for SARS-CoV-2 infections by Finnish healthcare district: <a href="/fin_totalTestsByHealthCareDistrict.geojson">fin_totalTestsByHealthCareDistrict.geojson</a></li>
                 </ul>
             </p>
 

@@ -1,0 +1,22 @@
+{
+    "type" : "Feature",
+    "id": "foo",
+    "geometry": {
+        "type": "Point",
+        "coordinates": [ 0.0, 0.0 ]
+    },
+    "properties": {
+        "featureType": "MeasureObservation",
+        "phenomenonTimeStart": null,
+        "phenomenonTimeEnd": null,
+        "resultTime": null,
+        "procedureName": "Number of tests per population by region",
+        "procedureReference": "https://covidjson.org/procedure/tests-by-region",
+        "observedPropertyTitle": "Number of SARS-CoV-2 infection tests per 100000 residents",
+        "observedProperty": "https://covidjson.org/quantity/SARS-CoV-2-test-count-per-100k-residents",
+        "observerName": "HS Datadesk open coronavirus data",
+        "observerReference": "https://github.com/HS-Datadesk/koronavirus-avoindata",
+        "ultimateFeatureOfInterestName": null,
+        "result": null
+    }
+  }
